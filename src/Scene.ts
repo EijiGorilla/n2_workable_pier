@@ -18,6 +18,7 @@ import {
   pileCapLayer,
   prowLayer,
   structureLayer,
+  utilityPointLayer,
 } from './layers';
 import Basemap from '@arcgis/core/Basemap';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
@@ -41,7 +42,7 @@ const basemap = new Basemap({
 });
 
 export const map = new Map({
-  basemap: basemap, //basemap, // "streets-night-vector", basemap
+  basemap: 'gray-vector', // basemap, //basemap, // "streets-night-vector", basemap
   ground: 'world-elevation',
 });
 
@@ -62,7 +63,7 @@ export const basemaps = new BasemapGallery({
 });
 
 export const overViewMap = new Map({
-  basemap: 'streets-night-vector', // "streets-night-vector", basemap
+  basemap: 'gray-vector', // "streets-night-vector", basemap
 });
 
 export const overView = new MapView({
@@ -86,6 +87,7 @@ map.add(lotLayer);
 map.add(structureLayer);
 map.add(pileCapLayer);
 map.add(nloLayer);
+map.add(utilityPointLayer);
 map.add(n2StationLayer);
 map.add(cp_break_lines);
 
@@ -150,7 +152,11 @@ export const legend_workable = new Legend({
     },
     {
       layer: nloLayer,
-      title: 'NLO',
+      title: 'NLO (Non-Land Owner)',
+    },
+    {
+      layer: utilityPointLayer,
+      title: 'Utility',
     },
   ],
 });

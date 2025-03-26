@@ -13,8 +13,8 @@ import {
 } from '@esri/calcite-components-react';
 
 function ContractPackageData() {
-  const [cpValueSelected, setCpValueSelected] = useState<any>('All');
-  const contractPackage = ['All', 'N-01', 'N-02', 'N-03', 'N-04'];
+  const [cpValueSelected, setCpValueSelected] = useState<any>('N-01');
+  const contractPackage = ['N-01', 'N-02', 'N-03', 'N-04'];
 
   // handle change event of the Municipality dropdown
   const handleContractPackageChange = (obj: any) => {

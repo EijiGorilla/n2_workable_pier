@@ -37,6 +37,7 @@ import {
   pileCapLayer,
   structureLayer,
   nloLayer,
+  utilityPointLayer,
 } from '../layers';
 
 function MapPanel() {
@@ -118,80 +119,51 @@ function MapPanel() {
 
   // Filter pile cap
   useEffect(() => {
+    const query_cp = "CP = '" + cpValueSelected + "'";
     if (cpValueSelected || componentSelected) {
-      if (cpValueSelected === 'All') {
-        pileCapLayer.definitionExpression = '1=1';
-        pierNumberLayer.definitionExpression = '1=1';
+      pileCapLayer.definitionExpression = query_cp;
+      pierNumberLayer.definitionExpression = query_cp;
+      lotLayer.definitionExpression = query_cp;
+      structureLayer.definitionExpression = query_cp;
+      nloLayer.definitionExpression = query_cp;
+      utilityPointLayer.definitionExpression = query_cp;
+      zoomToLayer(pierNumberLayer);
+
+      if (componentSelected === 'All') {
+        pileCapLayer.renderer = pile_cap_renderer_all;
+        pierNumberLayer.labelingInfo = pierNumberLayer_label_all;
+        lotLayer.visible = true;
+        structureLayer.visible = true;
+        nloLayer.visible = true;
+        utilityPointLayer.visible = true;
+      } else if (componentSelected === 'Land') {
+        pileCapLayer.renderer = pile_cap_renderer_land;
+        pierNumberLayer.labelingInfo = pierNumberLayer_label_land;
+        lotLayer.visible = true;
+        structureLayer.visible = false;
+        nloLayer.visible = false;
+        utilityPointLayer.visible = false;
+      } else if (componentSelected === 'Structure') {
+        pileCapLayer.renderer = pile_cap_renderer_structure;
+        pierNumberLayer.labelingInfo = pierNumberLayer_label_struc;
+        lotLayer.visible = false;
+        structureLayer.visible = true;
+        nloLayer.visible = false;
+        utilityPointLayer.visible = false;
+      } else if (componentSelected === 'ISF') {
+        pileCapLayer.renderer = pile_cap_renderer_nlo;
+        pierNumberLayer.labelingInfo = pierNumberLayer_label_nlo;
+        lotLayer.visible = false;
+        structureLayer.visible = false;
+        nloLayer.visible = true;
+        utilityPointLayer.visible = false;
+      } else if (componentSelected === 'Utility') {
+        pileCapLayer.renderer = pile_cap_renderer_utility;
+        pierNumberLayer.labelingInfo = pierNumberLayer_label_utility;
         lotLayer.visible = false;
         structureLayer.visible = false;
         nloLayer.visible = false;
-        zoomToLayer(pierNumberLayer);
-        if (componentSelected === 'All') {
-          pileCapLayer.renderer = pile_cap_renderer_all;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_all;
-          lotLayer.visible = false;
-          structureLayer.visible = false;
-          nloLayer.visible = false;
-        } else if (componentSelected === 'Land') {
-          pileCapLayer.renderer = pile_cap_renderer_land;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_land;
-          lotLayer.visible = true;
-          structureLayer.visible = false;
-          nloLayer.visible = false;
-        } else if (componentSelected === 'Structure') {
-          pileCapLayer.renderer = pile_cap_renderer_structure;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_struc;
-          lotLayer.visible = false;
-          structureLayer.visible = true;
-          nloLayer.visible = false;
-        } else if (componentSelected === 'ISF') {
-          pileCapLayer.renderer = pile_cap_renderer_nlo;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_nlo;
-          lotLayer.visible = false;
-          structureLayer.visible = false;
-          nloLayer.visible = true;
-        } else if (componentSelected === 'Utility') {
-          pileCapLayer.renderer = pile_cap_renderer_utility;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_utility;
-          lotLayer.visible = false;
-          structureLayer.visible = false;
-          nloLayer.visible = false;
-        }
-      } else if (cpValueSelected !== 'All') {
-        pileCapLayer.definitionExpression = "CP = '" + cpValueSelected + "'";
-        pierNumberLayer.definitionExpression = "CP = '" + cpValueSelected + "'";
-        zoomToLayer(pierNumberLayer);
-        if (componentSelected === 'All') {
-          pileCapLayer.renderer = pile_cap_renderer_all;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_all;
-          lotLayer.visible = false;
-          structureLayer.visible = false;
-          nloLayer.visible = false;
-        } else if (componentSelected === 'Land') {
-          pileCapLayer.renderer = pile_cap_renderer_land;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_land;
-          lotLayer.visible = true;
-          structureLayer.visible = false;
-          nloLayer.visible = false;
-        } else if (componentSelected === 'Structure') {
-          pileCapLayer.renderer = pile_cap_renderer_structure;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_struc;
-          lotLayer.visible = false;
-          structureLayer.visible = true;
-          nloLayer.visible = false;
-        } else if (componentSelected === 'ISF') {
-          pileCapLayer.renderer = pile_cap_renderer_nlo;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_nlo;
-          lotLayer.visible = false;
-          structureLayer.visible = false;
-          nloLayer.visible = true;
-        } else if (componentSelected === 'Utility') {
-          pileCapLayer.renderer = pile_cap_renderer_utility;
-          pierNumberLayer.labelingInfo = pierNumberLayer_label_utility;
-          lotLayer.visible = false;
-          structureLayer.visible = false;
-          nloLayer.visible = false;
-        }
+        utilityPointLayer.visible = true;
       }
     }
   }, [cpValueSelected, componentSelected]);

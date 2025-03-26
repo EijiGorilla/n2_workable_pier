@@ -4,9 +4,15 @@ import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import { SimpleMarkerSymbol, SimpleLineSymbol, TextSymbol, Font } from '@arcgis/core/symbols';
 
+import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import {
+  color_nonworkable_obstruction,
+  color_workable_obstruction,
+  util_marker_size,
+} from './UniqueValues';
 
 /////// Universal Renderere
 export const pointSymbol = new SimpleRenderer({
@@ -526,9 +532,9 @@ var lotIdLabel = new LabelClass({
   labelExpressionInfo: { expression: '$feature.LotID' },
   symbol: {
     type: 'text',
-    color: '#E1E1E1',
-    // haloColor: '#E1E1E1',
-    // haloSize: 0.4,
+    color: 'black', //'#E1E1E1',
+    haloColor: '#E1E1E1',
+    haloSize: 0.35,
     font: {
       size: 9,
       // weight: 'bold',
@@ -543,28 +549,28 @@ const lot_layer_renderer = new UniqueValueRenderer({
   uniqueValueInfos: [
     {
       value: 'Yes',
-      label: 'Non-Workable',
+      label: 'Obstruction',
       symbol: new SimpleFillSymbol({
-        color: color_nonworkable,
-        style: 'backward-diagonal',
+        color: color_nonworkable_obstruction,
+        // style: 'backward-diagonal',
         outline: {
           width: 1,
           color: 'black',
         },
       }),
     },
-    {
-      value: 'No',
-      label: 'Workable',
-      symbol: new SimpleFillSymbol({
-        color: color_workable,
-        style: 'backward-diagonal',
-        outline: {
-          width: 1,
-          color: 'black',
-        },
-      }),
-    },
+    // {
+    //   value: 'No',
+    //   label: 'Workable',
+    //   symbol: new SimpleFillSymbol({
+    //     color: color_workable_obstruction,
+    //     // style: 'backward-diagonal',
+    //     outline: {
+    //       width: 1,
+    //       color: 'black',
+    //     },
+    //   }),
+    // },
   ],
 });
 
@@ -580,6 +586,7 @@ export const lotLayer = new FeatureLayer({
   renderer: lot_layer_renderer,
   // popupTemplate: templateLot,
   title: 'Land Acquisition',
+  definitionExpression: "OwnershipType = 0 and Obstruction = 'Yes'",
   minScale: 20000,
   maxScale: 0,
   //labelsVisible: false,
@@ -593,9 +600,9 @@ var strucLabel = new LabelClass({
   labelExpressionInfo: { expression: '$feature.StrucID' },
   symbol: {
     type: 'text',
-    color: '#E1E1E1',
-    // haloColor: '#E1E1E1',
-    // haloSize: 0.4,
+    color: 'black', //'#E1E1E1',
+    haloColor: '#E1E1E1',
+    haloSize: 0.35,
     font: {
       size: 8,
       // weight: 'bold',
@@ -608,28 +615,28 @@ const struc_layer_renderer = new UniqueValueRenderer({
   uniqueValueInfos: [
     {
       value: 'Yes',
-      label: 'Non-Workable',
+      label: 'Obstruction',
       symbol: new SimpleFillSymbol({
-        color: color_nonworkable,
-        style: 'backward-diagonal',
+        color: color_nonworkable_obstruction,
+        // style: 'backward-diagonal',
         outline: {
           width: 1,
           color: 'black',
         },
       }),
     },
-    {
-      value: 'No',
-      label: 'Workable',
-      symbol: new SimpleFillSymbol({
-        color: color_workable,
-        style: 'backward-diagonal',
-        outline: {
-          width: 1,
-          color: 'black',
-        },
-      }),
-    },
+    // {
+    //   value: 'No',
+    //   label: 'Workable',
+    //   symbol: new SimpleFillSymbol({
+    //     color: color_workable_obstruction,
+    //     // style: 'backward-diagonal',
+    //     outline: {
+    //       width: 1,
+    //       color: 'black',
+    //     },
+    //   }),
+    // },
   ],
 });
 
@@ -643,6 +650,7 @@ export const structureLayer = new FeatureLayer({
   layerId: 3,
   labelingInfo: [strucLabel],
   renderer: struc_layer_renderer,
+  definitionExpression: "Obstruction = 'Yes'",
   // popupTemplate: templateLot,
   title: 'Structure',
   minScale: 1500,
@@ -654,36 +662,47 @@ export const structureLayer = new FeatureLayer({
 });
 
 /* NLO point */
-const nlo_renderer = new UniqueValueRenderer({
-  valueExpression: "When($feature.StatusRC == 1, 'Relocated', 'Others')",
-  uniqueValueInfos: [
-    {
-      value: 'Relocated',
-      label: 'Relocated',
-      symbol: new SimpleMarkerSymbol({
-        style: 'circle',
-        color: color_workable,
-        size: '7px',
-        outline: {
-          width: 0.3,
-          color: 'black',
-        },
-      }),
+// const nlo_renderer = new UniqueValueRenderer({
+//   valueExpression: "When($feature.StatusRC == 1, 'Relocated', 'Others')",
+//   uniqueValueInfos: [
+//     {
+//       value: 'Relocated',
+//       label: 'Relocated',
+//       symbol: new SimpleMarkerSymbol({
+//         style: 'circle',
+//         color: color_workable,
+//         size: '7px',
+//         outline: {
+//           width: 0.3,
+//           color: 'black',
+//         },
+//       }),
+//     },
+//     {
+//       value: 'Others',
+//       label: 'Un-relocated',
+//       symbol: new SimpleMarkerSymbol({
+//         style: 'circle',
+//         color: color_nonworkable,
+//         size: '7px',
+//         outline: {
+//           width: 0.3,
+//           color: 'black',
+//         },
+//       }),
+//     },
+//   ],
+// });
+
+const nlo_renderer = new SimpleRenderer({
+  symbol: new SimpleMarkerSymbol({
+    color: 'red',
+    size: '8px',
+    outline: {
+      width: 0.3,
+      color: 'black',
     },
-    {
-      value: 'Others',
-      label: 'Un-relocated',
-      symbol: new SimpleMarkerSymbol({
-        style: 'circle',
-        color: color_nonworkable,
-        size: '7px',
-        outline: {
-          width: 0.3,
-          color: 'black',
-        },
-      }),
-    },
-  ],
+  }),
 });
 
 export const nloLayer = new FeatureLayer({
@@ -695,13 +714,95 @@ export const nloLayer = new FeatureLayer({
   },
   layerId: 1,
   renderer: nlo_renderer,
-
+  definitionExpression: 'StatusRC <> 1',
   title: 'NLO (Non-Land Owner)',
   elevationInfo: {
     mode: 'on-the-ground',
   },
   minScale: 3000,
   maxScale: 0,
+  popupEnabled: false,
+});
+
+// Utility Point
+function getUniqueValueSymbol(name: string, size: number) {
+  return new SimpleRenderer({
+    symbol: new PictureMarkerSymbol({
+      url: name,
+      width: size,
+      height: size,
+    }),
+  });
+}
+
+function util_type_symbol(name: string, size: string) {
+  return new PictureMarkerSymbol({
+    url: name,
+    width: size,
+    height: size,
+  });
+}
+
+const utility_marker_renderer = new UniqueValueRenderer({
+  // field: 'UtilType',
+  valueExpression:
+    // eslint-disable-next-line no-multi-str
+    "When($feature.Status == 0 && $feature.UtilType == 1, 'Telecom',\
+                      $feature.Status == 0 && $feature.UtilType == 2, 'Water', \
+                      $feature.Status == 0 && $feature.UtilType == 3, 'Sewage', \
+                      $feature.Status == 0 && $feature.UtilType == 4, 'Power', \
+                      $feature.Status == 0 && $feature.UtilType == 5, 'Oil',$feature.Comp_Agency)",
+
+  uniqueValueInfos: [
+    {
+      value: 'Telecom', // Telecom/Cable TV
+      symbol: util_type_symbol(
+        'https://EijiGorilla.github.io/Symbols/Telecom_Logo2.svg',
+        util_marker_size,
+      ),
+    },
+    {
+      value: 'Water', // water
+      symbol: util_type_symbol(
+        'https://EijiGorilla.github.io/Symbols/Water_Logo2.svg',
+        util_marker_size,
+      ),
+    },
+    {
+      value: 'Sewage', // Sewage
+      symbol: util_type_symbol(
+        'https://EijiGorilla.github.io/Symbols/Sewage_Logo2.svg',
+        util_marker_size,
+      ),
+    },
+    {
+      value: 'Power', // Power
+      symbol: util_type_symbol(
+        'https://EijiGorilla.github.io/Symbols/Power_Logo2.svg',
+        util_marker_size,
+      ),
+    },
+    {
+      value: 'Oil', // Oil & Gas
+      symbol: util_type_symbol(
+        'https://EijiGorilla.github.io/Symbols/Gas_Logo2.svg',
+        util_marker_size,
+      ),
+    },
+  ],
+});
+
+export const utilityPointLayer = new FeatureLayer({
+  portalItem: {
+    id: '7507e625f480470a9af257d60cf67c1c',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 1,
+  title: 'Utility',
+
+  renderer: utility_marker_renderer,
   popupEnabled: false,
 });
 

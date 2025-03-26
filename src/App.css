@@ -42,35 +42,35 @@ br {
 } */
 
 calcite-action-bar {
-  --calcite-color-border-3: #555555;
+  /* --calcite-color-border-3: #555555; */
   --calcite-color-text-3: #bfbfbf;
 }
 
 calcite-shell {
-  --calcite-color-foreground-1: #2b2b2b;
-  --calcite-color-text-1: #ffffff;
-  --calcite-color-background: #2b2b2b;
-  --calcite-color-border-3: #555555;
+  /* --calcite-color-foreground-1: #2b2b2b; */
+  /* --calcite-color-text-1: #ffffff; */
+  /* --calcite-color-background: #2b2b2b; */
+  /* --calcite-color-border-3: #555555; */
 }
 
 calcite-shell-panel {
-  --calcite-color-foreground-1: #2b2b2b;
+  /* --calcite-color-foreground-1: #2b2b2b;
   --calcite-color-foreground-2: #2b2b2b;
-  --calcite-color-border-3: #555555;
+  --calcite-color-border-3: #555555; */
 }
 
 calcite-panel {
-  --calcite-color-foreground-1: #2b2b2b;
+  /* --calcite-color-foreground-1: #2b2b2b;
   --calcite-color-foreground-2: #2b2b2b;
   --calcite-color-text-2: #ffffff;
   background-color: #2b2b2b;
-  --calcite-color-border-3: #555555;
+  --calcite-color-border-3: #555555; */
   overflow: auto;
 }
 
 calcite-list {
   overflow-y: auto;
-  --calcite-color-border-3: #555555;
+  /* --calcite-color-border-3: #555555; */
 }
 
 calcite-avatar {
@@ -95,14 +95,9 @@ calcite-tabs {
   display: none;
 }
 
-.calcite-tutorial {
-  --calcite-color-brand: #039851;
-  --calcite-color-brand-hover: #008d52;
-}
-
 .calcite-tutorial calcite-chip {
-  --calcite-color-foreground-2: var(--calcite-color-brand);
-  --calcite-color-text-1: white;
+  /* --calcite-color-foreground-2: var(--calcite-color-brand); */
+  /* --calcite-color-text-1: white; */
   margin-inline-end: 0.75rem;
 }
 
@@ -116,7 +111,7 @@ calcite-tabs {
 }
 
 .esri-legend {
-  background-color: #2b2b2b;
+  /* background-color: #2b2b2b; */
   border-style: solid;
   border-width: 0.5px;
   border-color: #bfbfbf;

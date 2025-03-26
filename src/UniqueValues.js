@@ -25,6 +25,8 @@ export const workable_fields = [
 ];
 export const color_workable = '#98E600';
 export const color_nonworkable = '#FF0000';
+export const color_workable_obstruction = [152, 230, 0, 0.5];
+export const color_nonworkable_obstruction = [255, 0, 0, 0.4];
 export const workable_piers_uniqueValueInfos = [
   {
     value: 0,
@@ -127,6 +129,9 @@ export const monthList = [
     month: 'Dec.',
   },
 ];
+
+// utility point
+export const util_marker_size = '20px';
 
 // Main Map:------------------------------------
 export const home_rotation = 360; // 330
