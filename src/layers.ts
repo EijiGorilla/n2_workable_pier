@@ -657,6 +657,7 @@ export const structureLayer = new FeatureLayer({
   title: 'Structure',
   minScale: 1500,
   maxScale: 0,
+  popupEnabled: false,
   //labelsVisible: false,
   elevationInfo: {
     mode: 'on-the-ground',

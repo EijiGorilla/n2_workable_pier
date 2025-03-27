@@ -192,13 +192,18 @@ function MapPanel() {
           const result = response.results[0];
           // const title = result?.graphic.layer.title;
           if (result) {
-            const name = '20240711';
-            console.log(result.graphic.attributes['LotID']);
-            setImagePopup(true);
-            setCloseCustomPopup(false);
-            setImageDisplay(
-              `https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_${name}.jpg`,
-            );
+            if (result.graphic.layer) {
+              const layer_name = result.graphic.layer.title;
+              if (layer_name === 'Land Acquisition') {
+                const name = '20240711';
+                // console.log(result.graphic.attributes['LotID']);
+                setImagePopup(true);
+                setCloseCustomPopup(false);
+                setImageDisplay(
+                  `https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_${name}.jpg`,
+                );
+              }
+            }
           }
         });
       });
