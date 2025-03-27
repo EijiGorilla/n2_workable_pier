@@ -585,10 +585,12 @@ export const lotLayer = new FeatureLayer({
   labelingInfo: [lotIdLabel],
   renderer: lot_layer_renderer,
   // popupTemplate: templateLot,
+  outFields: ['LotID'],
   title: 'Land Acquisition',
   definitionExpression: "OwnershipType = 0 and Obstruction = 'Yes'",
   minScale: 20000,
   maxScale: 0,
+  popupEnabled: false,
   //labelsVisible: false,
   elevationInfo: {
     mode: 'on-the-ground',
@@ -695,6 +697,7 @@ export const structureLayer = new FeatureLayer({
 // });
 
 const nlo_renderer = new SimpleRenderer({
+  label: 'Obstruction',
   symbol: new SimpleMarkerSymbol({
     color: 'red',
     size: '8px',
@@ -801,7 +804,8 @@ export const utilityPointLayer = new FeatureLayer({
   },
   layerId: 1,
   title: 'Utility',
-
+  minScale: 5000,
+  maxScale: 0,
   renderer: utility_marker_renderer,
   popupEnabled: false,
 });

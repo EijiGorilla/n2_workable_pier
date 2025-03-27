@@ -35,14 +35,14 @@ const basemap = new Basemap({
   baseLayers: [
     new VectorTileLayer({
       portalItem: {
-        id: '824fe99ab989479f83b9a6d7f2da0bcb',
+        id: 'c62a1769441f4dfca8ef64dd860d6d15', // dark-gray: '824fe99ab989479f83b9a6d7f2da0bcb',
       },
     }),
   ],
 });
 
 export const map = new Map({
-  basemap: 'gray-vector', // basemap, //basemap, // "streets-night-vector", basemap
+  basemap: basemap, // 'gray-vector', // basemap, //basemap, // "streets-night-vector", basemap
   ground: 'world-elevation',
 });
 
@@ -156,7 +156,7 @@ export const legend_workable = new Legend({
     },
     {
       layer: utilityPointLayer,
-      title: 'Utility',
+      title: 'Utility (Un-relocated)',
     },
   ],
 });

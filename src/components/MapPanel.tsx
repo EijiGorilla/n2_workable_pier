@@ -14,8 +14,9 @@ import '../index.css';
 import '../App.css';
 import { disableZooming, setup, dateUpdate, zoomToLayer } from '../Query';
 import '@esri/calcite-components/dist/components/calcite-card';
+import '@esri/calcite-components/dist/components/calcite-action';
 import '@esri/calcite-components/dist/components/calcite-button';
-import { CalciteCard } from '@esri/calcite-components-react';
+import { CalciteCard, CalciteAction } from '@esri/calcite-components-react';
 import ComponentListDisplay, { useComponentListContext } from './ComponentContext';
 import ContractPackageDisplay, { useContractPackageContext } from './ContractPackageContext';
 
@@ -47,9 +48,16 @@ function MapPanel() {
   const { cpValueSelected } = useContractPackageContext();
   const { componentSelected } = useComponentListContext();
   const [controlPanelExpanded, setControlPanelExpanded] = useState<boolean>(true);
+
   // 0. Updated date
   const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
   const [daysPass, setDaysPass] = useState<boolean>(false);
+
+  // Image
+  const [imageDisplay, setImageDisplay] = useState<any>(null);
+  const [closeCustomPopup, setCloseCustomPopup] = useState<boolean>(false);
+  const [imagePopup, setImagePopup] = useState<boolean>(false);
+
   useEffect(() => {
     dateUpdate(updatedDateCategoryNames).then((response: any) => {
       setAsOfDate(response[0][0]);
@@ -175,9 +183,81 @@ function MapPanel() {
     }
   }, [cpValueSelected, componentSelected]);
 
+  // Feature Selection
+
+  useEffect(() => {
+    lotLayer.when(() => {
+      view.on('click', (event: any) => {
+        view.hitTest(event).then((response: any) => {
+          const result = response.results[0];
+          // const title = result?.graphic.layer.title;
+          if (result) {
+            const name = '20240711';
+            console.log(result.graphic.attributes['LotID']);
+            setImagePopup(true);
+            setCloseCustomPopup(false);
+            setImageDisplay(
+              `https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_${name}.jpg`,
+            );
+          }
+        });
+      });
+    });
+  }, []);
+
   return (
     <>
       <div className="mapDiv" ref={mapDiv}></div>
+
+      {/* Image*/}
+      <div
+        style={{
+          display:
+            imagePopup === true && closeCustomPopup === false
+              ? 'block'
+              : imagePopup === false && closeCustomPopup === true
+                ? 'none'
+                : 'none',
+        }}
+      >
+        <CalciteAction
+          data-action-id="custom-popup"
+          icon="x"
+          text="close"
+          id="close-popup"
+          //textEnabled={true}
+          onClick={(event: any) => {
+            // setNextWidget(event.target.id);
+            setCloseCustomPopup(closeCustomPopup === false ? true : false);
+            setImagePopup(imagePopup === true ? false : true);
+          }}
+          style={{
+            position: 'fixed',
+            zIndex: '2',
+            bottom: 5,
+            right: 20,
+          }}
+        ></CalciteAction>
+        <img
+          style={{
+            display:
+              imagePopup === true && closeCustomPopup === false
+                ? 'block'
+                : imagePopup === false && closeCustomPopup === true
+                  ? 'none'
+                  : 'none',
+            maxHeight: '350px',
+            maxWidth: '200px',
+            position: 'fixed',
+            zIndex: '1',
+            bottom: 5,
+            right: 20,
+          }}
+          // src="https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_20240711.jpg"
+          src={imageDisplay ? imageDisplay : null}
+        />
+      </div>
+
       {/* Control Panel*/}
       <div
         id="controlpanel"
