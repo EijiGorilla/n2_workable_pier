@@ -4,6 +4,7 @@ import { SimpleMarkerSymbol, SimpleLineSymbol, TextSymbol, Font } from '@arcgis/
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 
+//
 export const pointSymbol = new SimpleRenderer({
   symbol: new SimpleMarkerSymbol({
     style: 'circle',
@@ -16,6 +17,7 @@ export const pointSymbol = new SimpleRenderer({
   }),
 });
 
+// Pile Cap Layer
 export const workable_fields = [
   'AllWorkable',
   'LandWorkable',
@@ -51,6 +53,34 @@ export const workable_piers_uniqueValueInfos = [
     }),
   },
 ];
+
+// Strip Map Layer
+export const strip_map_uniqueValueInfos = [
+  {
+    value: 'No',
+    label: 'Workable',
+    symbol: new SimpleFillSymbol({
+      color: color_workable_obstruction,
+      outline: {
+        width: 0.8,
+        color: 'grey',
+      },
+    }),
+  },
+  {
+    value: 'Yes',
+    label: 'Non-Workable',
+    symbol: new SimpleFillSymbol({
+      color: color_nonworkable_obstruction,
+      outline: {
+        width: 0.8,
+        color: 'black',
+      },
+    }),
+  },
+];
+
+/////
 
 export const minScale = 577790;
 export const minScale_stNumber = minScale + 1000;

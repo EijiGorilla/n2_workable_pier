@@ -17,6 +17,7 @@ import {
   pierNumberLayer,
   pileCapLayer,
   prowLayer,
+  stripMapLayer,
   structureLayer,
   utilityPointLayer,
 } from './layers';
@@ -62,23 +63,23 @@ export const basemaps = new BasemapGallery({
   container: undefined,
 });
 
-export const overViewMap = new Map({
-  basemap: 'gray-vector', // "streets-night-vector", basemap
-});
+// export const overViewMap = new Map({
+//   basemap: 'gray-vector', // "streets-night-vector", basemap
+// });
 
-export const overView = new MapView({
-  map: overViewMap,
-  container: undefined,
-  center: overViewCenter,
-  zoom: zoom_overview,
-  //extent: fixedExtent,
-  constraints: {
-    rotationEnabled: false,
-  },
-  ui: {
-    components: ['attribution'],
-  },
-});
+// export const overView = new MapView({
+//   map: overViewMap,
+//   container: undefined,
+//   center: overViewCenter,
+//   zoom: zoom_overview,
+//   //extent: fixedExtent,
+//   constraints: {
+//     rotationEnabled: false,
+//   },
+//   ui: {
+//     components: ['attribution'],
+//   },
+// });
 
 // add layer
 map.add(prowLayer);
@@ -90,9 +91,9 @@ map.add(nloLayer);
 map.add(utilityPointLayer);
 map.add(n2StationLayer);
 map.add(cp_break_lines);
+map.add(stripMapLayer);
 
-overViewMap.add(n2CenterlineOverView);
-// overViewMap.add(scCenterlineOverView);
+// overViewMap.add(n2CenterlineOverView);
 
 // Compass
 export const compass = new Compass({

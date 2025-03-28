@@ -6,20 +6,21 @@ import {
   controlPanelExpand,
   legend_workable,
   map,
-  overView,
+  // overView,
   printExpand,
   view,
 } from '../Scene';
 import '../index.css';
 import '../App.css';
-import { disableZooming, setup, dateUpdate, zoomToLayer } from '../Query';
+// import { disableZooming, setup, dateUpdate, zoomToLayer } from '../Query';
+import { dateUpdate, zoomToLayer } from '../Query';
 import '@esri/calcite-components/dist/components/calcite-card';
 import '@esri/calcite-components/dist/components/calcite-action';
 import '@esri/calcite-components/dist/components/calcite-button';
 import { CalciteCard, CalciteAction } from '@esri/calcite-components-react';
 import ComponentListDisplay, { useComponentListContext } from './ComponentContext';
 import ContractPackageDisplay, { useContractPackageContext } from './ContractPackageContext';
-
+import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import { cutoff_days, updatedDateCategoryNames } from '../UniqueValues';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import {
@@ -39,6 +40,7 @@ import {
   structureLayer,
   nloLayer,
   utilityPointLayer,
+  stripMapLayer,
 } from '../layers';
 
 function MapPanel() {
@@ -58,6 +60,9 @@ function MapPanel() {
   const [closeCustomPopup, setCloseCustomPopup] = useState<boolean>(false);
   const [imagePopup, setImagePopup] = useState<boolean>(false);
 
+  // Strip map
+  const [selectedStrip, setSelectedStrip] = useState<any | undefined | null>(null);
+
   useEffect(() => {
     dateUpdate(updatedDateCategoryNames).then((response: any) => {
       setAsOfDate(response[0][0]);
@@ -71,8 +76,12 @@ function MapPanel() {
         type: 'none',
       };
 
+      view.when(() => {
+        zoomToLayer(pileCapLayer);
+      });
+
       // legend
-      view.ui.add(legend_workable, 'bottom-left');
+      view.ui.add(legend_workable, 'bottom-right');
 
       view.container = mapDiv.current;
       view.ui.components = [];
@@ -91,21 +100,21 @@ function MapPanel() {
     }
   }, []);
 
-  useEffect(() => {
-    if (overviewMapDiv.current) {
-      overView.container = overviewMapDiv.current;
-      view.ui.add(overviewMapDiv.current, 'top-right');
+  // useEffect(() => {
+  //   if (overviewMapDiv.current) {
+  //     overView.container = overviewMapDiv.current;
+  //     view.ui.add(overviewMapDiv.current, 'top-right');
 
-      overView.when(disableZooming);
+  //     overView.when(disableZooming);
 
-      overView.when(() => {
-        view.when(() => {
-          setup();
-          zoomToLayer(pierNumberLayer);
-        });
-      });
-    }
-  }, []);
+  //     overView.when(() => {
+  //       view.when(() => {
+  //         setup();
+  //         zoomToLayer(pierNumberLayer);
+  //       });
+  //     });
+  //   }
+  // }, []);
 
   // Control Panle Expand
   reactiveUtils.when(
@@ -135,6 +144,7 @@ function MapPanel() {
       structureLayer.definitionExpression = query_cp;
       nloLayer.definitionExpression = query_cp;
       utilityPointLayer.definitionExpression = query_cp;
+      stripMapLayer.definitionExpression = query_cp;
       zoomToLayer(pierNumberLayer);
 
       if (componentSelected === 'All') {
@@ -186,7 +196,7 @@ function MapPanel() {
   // Feature Selection
 
   useEffect(() => {
-    lotLayer.when(() => {
+    stripMapLayer.when(() => {
       view.on('click', (event: any) => {
         view.hitTest(event).then((response: any) => {
           const result = response.results[0];
@@ -194,14 +204,22 @@ function MapPanel() {
           if (result) {
             if (result.graphic.layer) {
               const layer_name = result.graphic.layer.title;
-              if (layer_name === 'Land Acquisition') {
-                const name = '20240711';
-                // console.log(result.graphic.attributes['LotID']);
+              if (layer_name === 'Strip Map') {
+                view.rotation = 305;
+                const url = result.graphic.attributes['PhotoURL'];
+                setSelectedStrip(result.graphic.attributes['OBJECTID']);
                 setImagePopup(true);
                 setCloseCustomPopup(false);
-                setImageDisplay(
-                  `https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_${name}.jpg`,
-                );
+                setImageDisplay(url === null ? null : url);
+
+                // Highlight selected strip
+                // view.whenLayerView(stripMapLayer).then((layerView: any) => {
+                //   highlight = layerView.highlight(result.graphic.attributes['OBJECTID']);
+                //   layerView.filter = new FeatureFilter({
+                //     where: undefined,
+                //   });
+                //   highlight.remove();
+                // });
               }
             }
           }
@@ -209,6 +227,21 @@ function MapPanel() {
       });
     });
   }, []);
+
+  // Higlight selected strip
+  useEffect(() => {
+    let highlight: any;
+    selectedStrip &&
+      view.whenLayerView(stripMapLayer).then((layerView: any) => {
+        highlight = layerView.highlight(selectedStrip);
+        view.on('click', () => {
+          layerView.filter = new FeatureFilter({
+            where: undefined,
+          });
+          highlight.remove();
+        });
+      });
+  }, [selectedStrip]);
 
   return (
     <>
@@ -251,12 +284,14 @@ function MapPanel() {
                 : imagePopup === false && closeCustomPopup === true
                   ? 'none'
                   : 'none',
-            maxHeight: '350px',
-            maxWidth: '200px',
+            height: '40%',
+            width: '45%',
             position: 'fixed',
             zIndex: '1',
             bottom: 5,
-            right: 20,
+            left: 15,
+            // borderStyle: 'solid',
+            // borderInlineWidth: '0.5px',
           }}
           // src="https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_20240711.jpg"
           src={imageDisplay ? imageDisplay : null}
@@ -274,14 +309,14 @@ function MapPanel() {
         </CalciteCard>
       </div>
       {/* Overview Map*/}
-      <div
+      {/* <div
         className="overviewMapdDiv"
         ref={overviewMapDiv}
         style={{
           position: 'fixed',
           top: controlPanelExpanded === false ? '50px' : '200px',
         }}
-      ></div>
+      ></div> */}
 
       {/* Updated date */}
       <div

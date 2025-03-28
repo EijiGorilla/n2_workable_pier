@@ -11,6 +11,9 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import {
   color_nonworkable_obstruction,
   color_workable_obstruction,
+  labelStation_fontSize,
+  labelStation_fontSize_default,
+  strip_map_uniqueValueInfos,
   util_marker_size,
 } from './UniqueValues';
 
@@ -77,8 +80,6 @@ export const centerlineProjectColor = {
 const pointColor = 'white';
 export const pointSize = '12px'; // original: 10px
 export const pointOutlineWidth = 2.5; // original: 1.5
-export const labelStation_fontSize = 11;
-export const labelStation_fontSize_default = 11.5;
 
 const pier_number_halo_color = '#4E4E4E';
 /////////////////////////////////////////////////////////////////////
@@ -162,6 +163,25 @@ export const prowLayer = new FeatureLayer({
   renderer: prowRenderer,
 });
 prowLayer.listMode = 'hide';
+
+/* Strip Map Index  */
+const stripMapRenderer = new UniqueValueRenderer({
+  field: 'NonWorkable',
+  uniqueValueInfos: strip_map_uniqueValueInfos,
+});
+
+export const stripMapLayer = new FeatureLayer({
+  portalItem: {
+    id: '2f183f5686314b958a4e13a811960c12',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  outFields: ['PhotoURL'],
+  title: 'Strip Map',
+  popupEnabled: false,
+  renderer: stripMapRenderer,
+});
 
 /* Pile Cap */
 const defaultSymbolPierCap = new SimpleFillSymbol({
@@ -490,11 +510,11 @@ pierNumberLayer.listMode = 'hide';
 //// Station point
 export const n2_station_label: any = new TextSymbol({
   color: centerlineProjectColor.nscrex_hex,
-  haloColor: 'black',
-  haloSize: 0.1,
+  haloColor: 'white',
+  haloSize: 0.4,
   font: new Font({
     size: labelStation_fontSize,
-    //weight: "bold"
+    weight: 'bold',
   }),
 });
 

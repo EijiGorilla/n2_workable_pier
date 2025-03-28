@@ -7,7 +7,8 @@ import {
   n2StationLayer,
   stationPointSymbol_nscrex,
 } from './layers';
-import { overView, view } from './Scene';
+// import { overView, view } from './Scene';
+import { view } from './Scene';
 import { home_rotation, labelStation_fontSize_default, primaryLabelColor } from './UniqueValues';
 import Graphic from '@arcgis/core/Graphic';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
@@ -66,90 +67,90 @@ export async function dateUpdate(category: any) {
 }
 
 // Overview Map constraint
-export function disableZooming(overView: any) {
-  overView.popup.dockEnabled = true;
+// export function disableZooming(overView: any) {
+//   overView.popup.dockEnabled = true;
 
-  // Removes the zoom action on the popup
-  overView.popup.actions = [];
+//   // Removes the zoom action on the popup
+//   overView.popup.actions = [];
 
-  // stops propagation of default behavior when an event fires
-  function stopEvtPropagation(event: any) {
-    event.stopPropagation();
-  }
+//   // stops propagation of default behavior when an event fires
+//   function stopEvtPropagation(event: any) {
+//     event.stopPropagation();
+//   }
 
-  // exlude the zoom widget from the default UI
-  view.ui.components = [];
-  overView.ui.components = [];
+//   // exlude the zoom widget from the default UI
+//   view.ui.components = [];
+//   overView.ui.components = [];
 
-  // disable mouse wheel scroll zooming on the overView
-  overView.on('mouse-wheel', stopEvtPropagation);
+//   // disable mouse wheel scroll zooming on the overView
+//   overView.on('mouse-wheel', stopEvtPropagation);
 
-  // disable zooming via double-click on the overView
-  overView.on('double-click', stopEvtPropagation);
+//   // disable zooming via double-click on the overView
+//   overView.on('double-click', stopEvtPropagation);
 
-  // disable zooming out via double-click + Control on the overView
-  overView.on('double-click', ['Control'], stopEvtPropagation);
+//   // disable zooming out via double-click + Control on the overView
+//   overView.on('double-click', ['Control'], stopEvtPropagation);
 
-  // disables pinch-zoom and panning on the overView
-  overView.on('drag', stopEvtPropagation);
+//   // disables pinch-zoom and panning on the overView
+//   overView.on('drag', stopEvtPropagation);
 
-  // disable the overView's zoom box to prevent the Shift + drag
-  // and Shift + Control + drag zoom gestures.
-  overView.on('drag', ['Shift'], stopEvtPropagation);
-  overView.on('drag', ['Shift', 'Control'], stopEvtPropagation);
+//   // disable the overView's zoom box to prevent the Shift + drag
+//   // and Shift + Control + drag zoom gestures.
+//   overView.on('drag', ['Shift'], stopEvtPropagation);
+//   overView.on('drag', ['Shift', 'Control'], stopEvtPropagation);
 
-  // prevents zooming with the + and - keys
-  overView.on('key-down', (event: any) => {
-    const prohibitedKeys = [
-      '+',
-      '-',
-      'Shift',
-      '_',
-      '=',
-      'ArrowUp',
-      'ArrowDown',
-      'ArrowRight',
-      'ArrowLeft',
-    ];
-    const keyPressed = event.key;
-    if (prohibitedKeys.indexOf(keyPressed) !== -1) {
-      event.stopPropagation();
-    }
-  });
+//   // prevents zooming with the + and - keys
+//   overView.on('key-down', (event: any) => {
+//     const prohibitedKeys = [
+//       '+',
+//       '-',
+//       'Shift',
+//       '_',
+//       '=',
+//       'ArrowUp',
+//       'ArrowDown',
+//       'ArrowRight',
+//       'ArrowLeft',
+//     ];
+//     const keyPressed = event.key;
+//     if (prohibitedKeys.indexOf(keyPressed) !== -1) {
+//       event.stopPropagation();
+//     }
+//   });
 
-  return overView;
-}
+//   return overView;
+// }
 
-const extentDebouncer = promiseUtils.debounce((extent3Dgraphic: any, extent: any) => {
-  extent3Dgraphic.geometry = extent;
-});
+// const extentDebouncer = promiseUtils.debounce((extent3Dgraphic: any, extent: any) => {
+//   extent3Dgraphic.geometry = extent;
+// });
 
-export function setup() {
-  let initialGeometry: any = null;
-  const extent3Dgraphic = new Graphic({
-    geometry: initialGeometry, // default: null
-    symbol: new SimpleFillSymbol({
-      color: [0, 0, 0, 0],
-      outline: {
-        width: 2,
-        color: '#ff1947', //[178,34,34]
-      },
-    }),
-  });
-  overView.graphics.add(extent3Dgraphic);
+// export function setup() {
+//   let initialGeometry: any = null;
+//   const extent3Dgraphic = new Graphic({
+//     geometry: initialGeometry, // default: null
+//     symbol: new SimpleFillSymbol({
+//       color: [0, 0, 0, 0],
+//       outline: {
+//         width: 2,
+//         color: '#ff1947', //[178,34,34]
+//       },
+//     }),
+//   });
+//   overView.graphics.add(extent3Dgraphic);
 
-  reactiveUtils.watch(
-    () => view.extent,
-    (extent: any) => {
-      // Sync the overview map location
-      // whenever the 3d view is stationary
-      extentDebouncer(extent3Dgraphic, extent);
-    },
-    {
-      initial: true,
-    },
-  );
-}
+//   reactiveUtils.watch(
+//     () => view.extent,
+//     (extent: any) => {
+//       // Sync the overview map location
+//       // whenever the 3d view is stationary
+//       extentDebouncer(extent3Dgraphic, extent);
+//     },
+//     {
+//       initial: true,
+//     },
+//   );
+// }
 
 // Zoom to layer
 export function zoomToLayer(layer: any) {

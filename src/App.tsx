@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <CalciteShell>
-        <ActionPanel />
+        {/* <ActionPanel /> */}
         <ContractPackageDataProvider>
           <ComponentListDataProvider>
             <MapPanel />

@@ -1,12 +1,12 @@
-.overviewMapdDiv {
+/* .overviewMapdDiv {
   position: fixed;
   z-index: 1;
-  /* top: 200px; */
+
   width: 12%;
   height: 16%;
   border: 1.7px solid grey;
   overflow: hidden;
-}
+} */
 
 .mapDiv {
   padding: 0;
@@ -115,7 +115,7 @@ calcite-tabs {
   border-style: solid;
   border-width: 0.5px;
   border-color: #bfbfbf;
-  max-width: 220px;
+  max-width: 180px;
 }
 
 /* .esri-view .esri-view-surface--touch-none:focus::after {
