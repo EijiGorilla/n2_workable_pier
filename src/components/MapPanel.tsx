@@ -285,7 +285,7 @@ function MapPanel() {
                   ? 'none'
                   : 'none',
             height: '40%',
-            width: '45%',
+            width: '85%',
             position: 'fixed',
             zIndex: '1',
             bottom: 5,
