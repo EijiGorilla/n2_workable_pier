@@ -273,7 +273,7 @@ function MapPanel() {
             position: 'fixed',
             zIndex: '2',
             bottom: 5,
-            right: 20,
+            left: 15,
           }}
         ></CalciteAction>
         <img
@@ -322,14 +322,14 @@ function MapPanel() {
       <div
         style={{
           color: daysPass === true ? 'red' : 'gray',
-          fontSize: '0.8rem',
+          fontSize: '0.6rem',
           float: 'right',
           marginRight: '5px',
           marginTop: '5px',
           zIndex: '1',
           position: 'fixed',
-          bottom: 5,
-          left: '25%',
+          bottom: 0,
+          right: 5,
         }}
       >
         {!asOfDate ? '' : 'As of ' + asOfDate}

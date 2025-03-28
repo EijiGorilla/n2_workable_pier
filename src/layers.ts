@@ -512,6 +512,7 @@ export const n2_station_label: any = new TextSymbol({
   color: centerlineProjectColor.nscrex_hex,
   haloColor: 'white',
   haloSize: 0.4,
+  yoffset: -20,
   font: new Font({
     size: labelStation_fontSize,
     weight: 'bold',
