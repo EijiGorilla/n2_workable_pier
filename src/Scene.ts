@@ -17,8 +17,6 @@ import {
   n2StationLayer_overview,
   nloLayer,
   nloLayer_overview,
-  pierNumberLayer,
-  pierNumberLayer_overview,
   pileCapLayer,
   pileCapLayer_overview,
   prowLayer,
@@ -93,7 +91,6 @@ export const overView = new MapView({
 
 // add layer
 map.add(prowLayer);
-map.add(pierNumberLayer);
 map.add(lotLayer);
 map.add(structureLayer);
 map.add(pileCapLayer);
@@ -105,7 +102,6 @@ map.add(stripMapLayer);
 
 overViewMap.add(prowLayer_overview);
 overViewMap.add(n2CenterlineOverView);
-overViewMap.add(pierNumberLayer_overview);
 overViewMap.add(lotLayer_overview);
 overViewMap.add(structureLayer_overview);
 overViewMap.add(pileCapLayer_overview);

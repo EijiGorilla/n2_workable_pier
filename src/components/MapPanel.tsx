@@ -27,7 +27,6 @@ import { cutoff_days, updatedDateCategoryNames } from '../UniqueValues';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import {
   lotLayer,
-  pierNumberLayer,
   pierNumberLayer_label_all,
   pierNumberLayer_label_nlo,
   pierNumberLayer_label_land,
@@ -48,6 +47,7 @@ import {
   structureLayer_overview,
   nloLayer_overview,
   utilityPointLayer_overview,
+  pileCapLayer_overview,
 } from '../layers';
 import Extent from '@arcgis/core/geometry/Extent';
 
@@ -138,7 +138,7 @@ function MapPanel() {
       overView.when(() => {
         view.when(() => {
           // setup();
-          zoomToLayer(pierNumberLayer);
+          zoomToLayer(pileCapLayer);
         });
       });
     }
@@ -167,74 +167,87 @@ function MapPanel() {
   );
 
   // Filter pile cap
+  useEffect(() => {
+    zoomToLayer(pileCapLayer);
+  }, [cpValueSelected]);
 
   useEffect(() => {
     if (cpValueSelected || componentSelected) {
       filterPileCapByCP(cpValueSelected);
 
-      zoomToLayer(pierNumberLayer);
+      // zoomToLayer(pierNumberLayer);
 
       if (componentSelected === 'All') {
         pileCapLayer.renderer = pile_cap_renderer_all;
-        pierNumberLayer.labelingInfo = pierNumberLayer_label_all;
+        pileCapLayer.labelingInfo = pierNumberLayer_label_all;
         lotLayer.visible = true;
         structureLayer.visible = true;
         nloLayer.visible = true;
         utilityPointLayer.visible = true;
 
         // overview
+        pileCapLayer_overview.renderer = pile_cap_renderer_all;
+        pileCapLayer_overview.labelingInfo = pierNumberLayer_label_all;
         lotLayer_overview.visible = true;
         structureLayer_overview.visible = true;
         nloLayer_overview.visible = true;
         utilityPointLayer_overview.visible = true;
       } else if (componentSelected === 'Land') {
         pileCapLayer.renderer = pile_cap_renderer_land;
-        pierNumberLayer.labelingInfo = pierNumberLayer_label_land;
+        pileCapLayer.labelingInfo = pierNumberLayer_label_land;
         lotLayer.visible = true;
         structureLayer.visible = false;
         nloLayer.visible = false;
         utilityPointLayer.visible = false;
 
         // overview
+        pileCapLayer_overview.renderer = pile_cap_renderer_land;
+        pileCapLayer_overview.labelingInfo = pierNumberLayer_label_land;
         lotLayer_overview.visible = true;
         structureLayer_overview.visible = false;
         nloLayer_overview.visible = false;
         utilityPointLayer_overview.visible = false;
       } else if (componentSelected === 'Structure') {
         pileCapLayer.renderer = pile_cap_renderer_structure;
-        pierNumberLayer.labelingInfo = pierNumberLayer_label_struc;
+        pileCapLayer.labelingInfo = pierNumberLayer_label_struc;
         lotLayer.visible = false;
         structureLayer.visible = true;
         nloLayer.visible = false;
         utilityPointLayer.visible = false;
 
         // Overview
+        pileCapLayer_overview.renderer = pile_cap_renderer_structure;
+        pileCapLayer_overview.labelingInfo = pierNumberLayer_label_struc;
         lotLayer_overview.visible = false;
         structureLayer_overview.visible = true;
         nloLayer_overview.visible = false;
         utilityPointLayer_overview.visible = false;
       } else if (componentSelected === 'ISF') {
         pileCapLayer.renderer = pile_cap_renderer_nlo;
-        pierNumberLayer.labelingInfo = pierNumberLayer_label_nlo;
+        pileCapLayer.labelingInfo = pierNumberLayer_label_nlo;
         lotLayer.visible = false;
         structureLayer.visible = false;
         nloLayer.visible = true;
         utilityPointLayer.visible = false;
 
         // Overview
+        pileCapLayer_overview.renderer = pile_cap_renderer_nlo;
+        pileCapLayer_overview.labelingInfo = pierNumberLayer_label_nlo;
         lotLayer_overview.visible = false;
         structureLayer_overview.visible = false;
         nloLayer_overview.visible = true;
         utilityPointLayer_overview.visible = false;
       } else if (componentSelected === 'Utility') {
         pileCapLayer.renderer = pile_cap_renderer_utility;
-        pierNumberLayer.labelingInfo = pierNumberLayer_label_utility;
+        pileCapLayer.labelingInfo = pierNumberLayer_label_utility;
         lotLayer.visible = false;
         structureLayer.visible = false;
         nloLayer.visible = false;
         utilityPointLayer.visible = true;
 
         // Overview
+        pileCapLayer_overview.renderer = pile_cap_renderer_utility;
+        pileCapLayer_overview.labelingInfo = pierNumberLayer_label_utility;
         lotLayer_overview.visible = false;
         structureLayer_overview.visible = false;
         nloLayer_overview.visible = false;

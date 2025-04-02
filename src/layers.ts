@@ -16,6 +16,8 @@ import {
   strip_map_uniqueValueInfos,
   strip_map_uniqueValueInfos_overview,
   util_marker_size,
+  xoffset_pierNumber,
+  yoffset_pierNumber,
 } from './UniqueValues';
 
 /////// Universal Renderere
@@ -196,94 +198,20 @@ const defaultSymbolPierCap = new SimpleFillSymbol({
   }),
 });
 
-export const pile_cap_renderer_all = new UniqueValueRenderer({
-  field: workable_fields[0],
-  // defaultSymbol: defaultSymbolPierCap,
-  uniqueValueInfos: workable_piers_uniqueValueInfos,
-});
-
-export const pile_cap_renderer_land = new UniqueValueRenderer({
-  field: workable_fields[1],
-  // defaultSymbol: defaultSymbolPierCap,
-  uniqueValueInfos: workable_piers_uniqueValueInfos,
-});
-
-export const pile_cap_renderer_structure = new UniqueValueRenderer({
-  field: workable_fields[2],
-  // defaultSymbol: defaultSymbolPierCap,
-  uniqueValueInfos: workable_piers_uniqueValueInfos,
-});
-
-export const pile_cap_renderer_nlo = new UniqueValueRenderer({
-  field: workable_fields[3],
-  // defaultSymbol: defaultSymbolPierCap,
-  uniqueValueInfos: workable_piers_uniqueValueInfos,
-});
-
-export const pile_cap_renderer_utility = new UniqueValueRenderer({
-  field: workable_fields[4],
-  // defaultSymbol: defaultSymbolPierCap,
-  uniqueValueInfos: workable_piers_uniqueValueInfos,
-});
-
-export const pileCapLayer = new FeatureLayer({
-  portalItem: {
-    id: '6f4bf8c34d344277bb69f6590096203f',
-    portal: {
-      url: 'https://gis.railway-sector.com/portal',
-    },
-  },
-
-  title: 'Pile Cap',
-  minScale: 10000,
-  maxScale: 0,
-  renderer: pile_cap_renderer_all,
-  popupEnabled: false,
-  elevationInfo: {
-    mode: 'on-the-ground',
-  },
-});
-
-/* Pier Number point*/
-const defaultSymbolPierNumber = new SimpleMarkerSymbol({
-  color: [225, 225, 225],
-  outline: new SimpleLineSymbol({
-    color: [110, 110, 110],
-    width: 1,
-  }),
-});
-
-const pier_number_label_default = new LabelClass({
-  symbol: new TextSymbol({
-    color: 'white',
-    haloColor: '#9ca3af',
-    haloSize: 0.5,
-    yoffset: 5,
-    font: {
-      size: 10,
-      weight: 'bold',
-    },
-  }),
-  labelPlacement: 'above-right',
-  labelExpressionInfo: {
-    expression: '$feature.PIER',
-  },
-});
-
 export const pier_number_label_workable_all = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
     },
   }),
-  labelPlacement: 'above-right',
+  labelPlacement: 'always-horizontal',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'AllWorkable = 1',
 });
@@ -293,15 +221,15 @@ export const pier_number_label_nonworkable_all = new LabelClass({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
     },
   }),
-  labelPlacement: 'above-right',
+  labelPlacement: 'always-horizontal',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'AllWorkable = 0',
 });
@@ -311,15 +239,15 @@ export const pier_number_label_workable_land = new LabelClass({
     color: color_workable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
     },
   }),
-  labelPlacement: 'above-right',
+  labelPlacement: 'always-horizontal',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'LandWorkable = 1',
 });
@@ -329,7 +257,7 @@ export const pier_number_label_nonworkable_land = new LabelClass({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -337,7 +265,7 @@ export const pier_number_label_nonworkable_land = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'LandWorkable = 0',
 });
@@ -347,7 +275,7 @@ export const pier_number_label_workable_struc = new LabelClass({
     color: color_workable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -355,7 +283,7 @@ export const pier_number_label_workable_struc = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'StrucWorkable = 1',
 });
@@ -365,7 +293,7 @@ export const pier_number_label_nonworkable_struc = new LabelClass({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -373,7 +301,7 @@ export const pier_number_label_nonworkable_struc = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'StrucWorkable = 0',
 });
@@ -383,7 +311,7 @@ export const pier_number_label_workable_nlo = new LabelClass({
     color: color_workable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -391,7 +319,7 @@ export const pier_number_label_workable_nlo = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'NLOWorkable = 1',
 });
@@ -401,7 +329,7 @@ export const pier_number_label_nonworkable_nlo = new LabelClass({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -409,7 +337,7 @@ export const pier_number_label_nonworkable_nlo = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'NLOWorkable = 0',
 });
@@ -419,7 +347,7 @@ export const pier_number_label_workable_utility = new LabelClass({
     color: color_workable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -427,7 +355,7 @@ export const pier_number_label_workable_utility = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'UtilWorkable = 1',
 });
@@ -437,7 +365,7 @@ export const pier_number_label_nonworkable_utility = new LabelClass({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
     haloSize: 0.5,
-    yoffset: 5,
+    yoffset: yoffset_pierNumber,
     font: {
       size: 10,
       weight: 'bold',
@@ -445,7 +373,7 @@ export const pier_number_label_nonworkable_utility = new LabelClass({
   }),
   labelPlacement: 'above-right',
   labelExpressionInfo: {
-    expression: '$feature.PIER',
+    expression: '$feature.PierNumber',
   },
   where: 'UtilWorkable = 0',
 });
@@ -487,28 +415,54 @@ export const pier_number_point_renderer = new SimpleRenderer({
   }),
 });
 
-export const pierNumberLayer = new FeatureLayer(
-  {
-    portalItem: {
-      id: '876de8483da9485aac5df737cbef2143',
-      portal: {
-        url: 'https://gis.railway-sector.com/portal',
-      },
-    },
-    layerId: 6,
-    renderer: pier_number_point_renderer,
-    labelingInfo: [pier_number_label_workable_all, pier_number_label_nonworkable_all],
-    title: 'Pier Number', //'Pier with Access Date (as of October 2023)',
-    minScale: 150000,
-    maxScale: 0,
-    popupEnabled: false,
-    elevationInfo: {
-      mode: 'on-the-ground',
+export const pile_cap_renderer_all = new UniqueValueRenderer({
+  field: workable_fields[0],
+  // defaultSymbol: defaultSymbolPierCap,
+  uniqueValueInfos: workable_piers_uniqueValueInfos,
+});
+
+export const pile_cap_renderer_land = new UniqueValueRenderer({
+  field: workable_fields[1],
+  // defaultSymbol: defaultSymbolPierCap,
+  uniqueValueInfos: workable_piers_uniqueValueInfos,
+});
+
+export const pile_cap_renderer_structure = new UniqueValueRenderer({
+  field: workable_fields[2],
+  // defaultSymbol: defaultSymbolPierCap,
+  uniqueValueInfos: workable_piers_uniqueValueInfos,
+});
+
+export const pile_cap_renderer_nlo = new UniqueValueRenderer({
+  field: workable_fields[3],
+  // defaultSymbol: defaultSymbolPierCap,
+  uniqueValueInfos: workable_piers_uniqueValueInfos,
+});
+
+export const pile_cap_renderer_utility = new UniqueValueRenderer({
+  field: workable_fields[4],
+  // defaultSymbol: defaultSymbolPierCap,
+  uniqueValueInfos: workable_piers_uniqueValueInfos,
+});
+
+export const pileCapLayer = new FeatureLayer({
+  portalItem: {
+    id: '6f4bf8c34d344277bb69f6590096203f',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
     },
   },
-  //{ utcOffset: 300 },
-);
-pierNumberLayer.listMode = 'hide';
+
+  title: 'Pile Cap',
+  minScale: 150000,
+  maxScale: 0,
+  renderer: pile_cap_renderer_all,
+  labelingInfo: [pier_number_label_workable_all, pier_number_label_nonworkable_all],
+  popupEnabled: false,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+});
 
 //// Station point
 export const n2_station_label: any = new TextSymbol({
@@ -680,7 +634,7 @@ export const structureLayer = new FeatureLayer({
   definitionExpression: "Obstruction = 'Yes'",
   // popupTemplate: templateLot,
   title: 'Structure',
-  minScale: 1500,
+  minScale: 2500,
   maxScale: 0,
   popupEnabled: false,
   //labelsVisible: false,
@@ -838,6 +792,7 @@ export const utilityPointLayer = new FeatureLayer({
 
 ///////////////////////////////////////////////////////
 // ----------------- Overview Map ----------------//
+
 export const n2StationLayer_overview = new FeatureLayer({
   portalItem: {
     id: 'ace32f63bafc40f6bcfeecbee5fa6c69',
@@ -864,9 +819,10 @@ export const pileCapLayer_overview = new FeatureLayer({
   },
 
   title: 'Pile Cap',
-  // minScale: 150000,
-  // maxScale: 0,
+  minScale: 150000,
+  maxScale: 0,
   renderer: pile_cap_renderer_all,
+  labelingInfo: [pier_number_label_workable_all, pier_number_label_nonworkable_all],
   popupEnabled: false,
   elevationInfo: {
     mode: 'on-the-ground',
@@ -910,7 +866,8 @@ export const lotLayer_overview = new FeatureLayer({
     },
   },
   layerId: 4,
-  labelingInfo: [lotIdLabel],
+  // labelingInfo: [lotIdLabel],
+  labelsVisible: false,
   renderer: lot_layer_renderer,
   // popupTemplate: templateLot,
   title: 'Land Acquisition',
@@ -930,12 +887,13 @@ export const structureLayer_overview = new FeatureLayer({
     },
   },
   layerId: 3,
-  labelingInfo: [strucLabel],
+  // labelingInfo: [strucLabel],
+  labelsVisible: false,
   renderer: struc_layer_renderer,
   definitionExpression: "Obstruction = 'Yes'",
   // popupTemplate: templateLot,
   title: 'Structure',
-  minScale: 1500,
+  minScale: 3500,
   maxScale: 0,
   popupEnabled: false,
   //labelsVisible: false,
@@ -977,29 +935,6 @@ export const utilityPointLayer_overview = new FeatureLayer({
   renderer: utility_marker_renderer,
   popupEnabled: false,
 });
-
-export const pierNumberLayer_overview = new FeatureLayer(
-  {
-    portalItem: {
-      id: '876de8483da9485aac5df737cbef2143',
-      portal: {
-        url: 'https://gis.railway-sector.com/portal',
-      },
-    },
-    layerId: 6,
-    renderer: pier_number_point_renderer,
-    labelingInfo: [pier_number_label_workable_all, pier_number_label_nonworkable_all],
-    title: 'Pier Number', //'Pier with Access Date (as of October 2023)',
-    minScale: 150000,
-    maxScale: 0,
-    popupEnabled: false,
-    elevationInfo: {
-      mode: 'on-the-ground',
-    },
-  },
-  //{ utcOffset: 300 },
-);
-pierNumberLayer_overview.listMode = 'hide';
 
 /* Strip Map Index  */
 // const stripMapRenderer_overview = new UniqueValueRenderer({

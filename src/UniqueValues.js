@@ -55,6 +55,9 @@ export const workable_piers_uniqueValueInfos = [
   },
 ];
 
+export const xoffset_pierNumber = 0;
+export const yoffset_pierNumber = 10;
+
 // Strip Map Layer
 export const strip_map_uniqueValueInfos = [
   {

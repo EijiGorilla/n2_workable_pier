@@ -5,7 +5,6 @@ import {
   lotLayer_overview,
   nloLayer,
   nloLayer_overview,
-  pierNumberLayer,
   pileCapLayer,
   stripMapLayer,
   structureLayer,
@@ -74,7 +73,7 @@ export async function dateUpdate(category: any) {
 export function filterPileCapByCP(cp: any) {
   const query_cp = "CP = '" + cp + "'";
   pileCapLayer.definitionExpression = query_cp;
-  pierNumberLayer.definitionExpression = query_cp;
+
   lotLayer.definitionExpression = query_cp;
   structureLayer.definitionExpression = query_cp;
   nloLayer.definitionExpression = query_cp;
