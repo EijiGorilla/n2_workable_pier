@@ -273,8 +273,8 @@ const pier_number_label_default = new LabelClass({
 export const pier_number_label_workable_all = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -291,8 +291,8 @@ export const pier_number_label_workable_all = new LabelClass({
 export const pier_number_label_nonworkable_all = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -309,8 +309,8 @@ export const pier_number_label_nonworkable_all = new LabelClass({
 export const pier_number_label_workable_land = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -327,8 +327,8 @@ export const pier_number_label_workable_land = new LabelClass({
 export const pier_number_label_nonworkable_land = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -345,8 +345,8 @@ export const pier_number_label_nonworkable_land = new LabelClass({
 export const pier_number_label_workable_struc = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -363,8 +363,8 @@ export const pier_number_label_workable_struc = new LabelClass({
 export const pier_number_label_nonworkable_struc = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -381,8 +381,8 @@ export const pier_number_label_nonworkable_struc = new LabelClass({
 export const pier_number_label_workable_nlo = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -399,8 +399,8 @@ export const pier_number_label_workable_nlo = new LabelClass({
 export const pier_number_label_nonworkable_nlo = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -417,8 +417,8 @@ export const pier_number_label_nonworkable_nlo = new LabelClass({
 export const pier_number_label_workable_utility = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,
@@ -435,8 +435,8 @@ export const pier_number_label_workable_utility = new LabelClass({
 export const pier_number_label_nonworkable_utility = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
-    haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    // haloColor: pier_number_halo_color,
+    // haloSize: 0.5,
     yoffset: 5,
     font: {
       size: 10,

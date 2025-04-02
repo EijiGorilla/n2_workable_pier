@@ -7,7 +7,7 @@ import LayerList from '@arcgis/core/widgets/LayerList';
 import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
 import Print from '@arcgis/core/widgets/Print';
 // import { home_center, home_rotation, home_scale, overViewCenter, zoom } from './UniqueValues';
-
+import ScaleBar from '@arcgis/core/widgets/ScaleBar';
 import {
   cp_break_lines,
   lotLayer,
@@ -132,6 +132,12 @@ export const controlPanelExpand = new Expand({
   content: undefined,
 });
 
+// Scale bar
+export const scaleBar_overview = new ScaleBar({
+  view: overView,
+  container: undefined,
+});
+
 // Overview expand
 export const overViewExpand = new Expand({
   view,
@@ -155,6 +161,33 @@ export const layerList = new LayerList({
 
     item.title === 'Chainage' ? (item.visible = false) : (item.visible = true);
   },
+});
+
+export const legend_workable_overview = new Legend({
+  view: overView,
+  container: 'workable-legend-overview',
+  layerInfos: [
+    {
+      layer: pileCapLayer_overview,
+      title: 'Piers',
+    },
+    {
+      layer: lotLayer_overview,
+      title: 'Land',
+    },
+    {
+      layer: structureLayer_overview,
+      title: 'Structure',
+    },
+    {
+      layer: nloLayer_overview,
+      title: 'NLO (Non-Land Owner)',
+    },
+    {
+      layer: utilityPointLayer_overview,
+      title: 'Utility (Un-relocated)',
+    },
+  ],
 });
 
 export const legend_workable = new Legend({

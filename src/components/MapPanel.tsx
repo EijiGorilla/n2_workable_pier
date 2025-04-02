@@ -6,10 +6,12 @@ import {
   compass_overview,
   controlPanelExpand,
   legend_workable,
+  legend_workable_overview,
   map,
   overView,
   overViewExpand,
   printExpand,
+  scaleBar_overview,
   view,
 } from '../Scene';
 import '../index.css';
@@ -53,6 +55,7 @@ function MapPanel() {
   const mapDiv = useRef(null);
   const overviewMapDiv = useRef<any>(null);
   const compassDiv = useRef<HTMLDivElement | undefined | any>(null);
+  const scaleBarDiv_overview = useRef<HTMLDivElement | undefined | any>(null);
   const compassDiv_overview = useRef<HTMLDivElement | undefined | any>(null);
   const { cpValueSelected } = useContractPackageContext();
   const { componentSelected } = useComponentListContext();
@@ -72,6 +75,17 @@ function MapPanel() {
     });
   }, []);
 
+  // Legend
+  useEffect(() => {
+    if (overViewExpand?.expanded === true) {
+      view.ui.add(legend_workable_overview, 'bottom-right');
+      view.ui.remove(legend_workable);
+    } else {
+      view.ui.remove(legend_workable_overview);
+      view.ui.add(legend_workable, 'bottom-right');
+    }
+  }, [overViewExpand.expanded]);
+
   useEffect(() => {
     if (mapDiv.current) {
       map.ground.navigationConstraint = {
@@ -82,7 +96,7 @@ function MapPanel() {
         zoomToLayer(pileCapLayer);
       });
 
-      // legend
+      // legend;
       view.ui.add(legend_workable, 'bottom-right');
 
       view.container = mapDiv.current;
@@ -110,6 +124,10 @@ function MapPanel() {
     if (overviewMapDiv.current) {
       overView.container = overviewMapDiv.current;
       // view.ui.add(overviewMapDiv.current, 'bottom-left');
+
+      // scale bar
+      scaleBar_overview.container = scaleBarDiv_overview.current;
+      overView.ui.add(scaleBar_overview, 'bottom-right');
 
       // compass
       compass_overview.container = compassDiv_overview.current;
@@ -228,7 +246,7 @@ function MapPanel() {
   // Legend for Alignment & Progress
   useEffect(() => {
     if (componentSelected !== 'All') {
-      view.rotation = 360;
+      // view.rotation = 360;
     }
   }, [cpValueSelected, componentSelected]);
 
