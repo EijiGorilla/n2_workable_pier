@@ -3,24 +3,24 @@
 import { useRef, useEffect, useState } from 'react';
 import {
   compass,
+  compass_overview,
   controlPanelExpand,
   legend_workable,
   map,
-  // overView,
+  overView,
+  overViewExpand,
   printExpand,
   view,
 } from '../Scene';
 import '../index.css';
 import '../App.css';
 // import { disableZooming, setup, dateUpdate, zoomToLayer } from '../Query';
-import { dateUpdate, zoomToLayer } from '../Query';
+import { dateUpdate, disableZooming, filterPileCapByCP, zoomToLayer } from '../Query';
 import '@esri/calcite-components/dist/components/calcite-card';
-import '@esri/calcite-components/dist/components/calcite-action';
 import '@esri/calcite-components/dist/components/calcite-button';
-import { CalciteCard, CalciteAction } from '@esri/calcite-components-react';
+import { CalciteCard } from '@esri/calcite-components-react';
 import ComponentListDisplay, { useComponentListContext } from './ComponentContext';
 import ContractPackageDisplay, { useContractPackageContext } from './ContractPackageContext';
-import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import { cutoff_days, updatedDateCategoryNames } from '../UniqueValues';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import {
@@ -41,12 +41,19 @@ import {
   nloLayer,
   utilityPointLayer,
   stripMapLayer,
+  stripMapLayer_overview,
+  lotLayer_overview,
+  structureLayer_overview,
+  nloLayer_overview,
+  utilityPointLayer_overview,
 } from '../layers';
+import Extent from '@arcgis/core/geometry/Extent';
 
 function MapPanel() {
   const mapDiv = useRef(null);
-  const overviewMapDiv = useRef(null);
+  const overviewMapDiv = useRef<any>(null);
   const compassDiv = useRef<HTMLDivElement | undefined | any>(null);
+  const compassDiv_overview = useRef<HTMLDivElement | undefined | any>(null);
   const { cpValueSelected } = useContractPackageContext();
   const { componentSelected } = useComponentListContext();
   const [controlPanelExpanded, setControlPanelExpanded] = useState<boolean>(true);
@@ -54,11 +61,6 @@ function MapPanel() {
   // 0. Updated date
   const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
   const [daysPass, setDaysPass] = useState<boolean>(false);
-
-  // Image
-  const [imageDisplay, setImageDisplay] = useState<any>(null);
-  const [closeCustomPopup, setCloseCustomPopup] = useState<boolean>(false);
-  const [imagePopup, setImagePopup] = useState<boolean>(false);
 
   // Strip map
   const [selectedStrip, setSelectedStrip] = useState<any | undefined | null>(null);
@@ -97,24 +99,32 @@ function MapPanel() {
       // Control Panel
       controlPanelExpand.content = document.querySelector(`[id="controlpanel"]`) as HTMLDivElement;
       view.ui.add(controlPanelExpand, 'top-right');
+
+      // overview
+      overViewExpand.content = document.querySelector(`[id="overviewpanel"]`) as HTMLDivElement;
+      view.ui.add(overViewExpand, 'bottom-right');
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (overviewMapDiv.current) {
-  //     overView.container = overviewMapDiv.current;
-  //     view.ui.add(overviewMapDiv.current, 'top-right');
+  useEffect(() => {
+    if (overviewMapDiv.current) {
+      overView.container = overviewMapDiv.current;
+      // view.ui.add(overviewMapDiv.current, 'bottom-left');
 
-  //     overView.when(disableZooming);
+      // compass
+      compass_overview.container = compassDiv_overview.current;
+      overView.ui.add(compass_overview, 'top-left');
 
-  //     overView.when(() => {
-  //       view.when(() => {
-  //         setup();
-  //         zoomToLayer(pierNumberLayer);
-  //       });
-  //     });
-  //   }
-  // }, []);
+      overView.when(disableZooming);
+
+      overView.when(() => {
+        view.when(() => {
+          // setup();
+          zoomToLayer(pierNumberLayer);
+        });
+      });
+    }
+  }, []);
 
   // Control Panle Expand
   reactiveUtils.when(
@@ -127,24 +137,23 @@ function MapPanel() {
     () => setControlPanelExpanded(true),
   );
 
-  // Alignment & Progress Line and Graphics
-  useEffect(() => {
-    if (cpValueSelected && componentSelected) {
-      // layer.definitionExpression = ''
-    }
-  }, [cpValueSelected, componentSelected]);
+  // Overview
+  reactiveUtils.when(
+    () => overViewExpand?.expanded === false,
+    () => view.ui.remove(overviewMapDiv.current),
+  );
+
+  reactiveUtils.when(
+    () => overViewExpand?.expanded === true,
+    () => view.ui.add(overviewMapDiv.current, 'bottom-left'),
+  );
 
   // Filter pile cap
+
   useEffect(() => {
-    const query_cp = "CP = '" + cpValueSelected + "'";
     if (cpValueSelected || componentSelected) {
-      pileCapLayer.definitionExpression = query_cp;
-      pierNumberLayer.definitionExpression = query_cp;
-      lotLayer.definitionExpression = query_cp;
-      structureLayer.definitionExpression = query_cp;
-      nloLayer.definitionExpression = query_cp;
-      utilityPointLayer.definitionExpression = query_cp;
-      stripMapLayer.definitionExpression = query_cp;
+      filterPileCapByCP(cpValueSelected);
+
       zoomToLayer(pierNumberLayer);
 
       if (componentSelected === 'All') {
@@ -154,6 +163,12 @@ function MapPanel() {
         structureLayer.visible = true;
         nloLayer.visible = true;
         utilityPointLayer.visible = true;
+
+        // overview
+        lotLayer_overview.visible = true;
+        structureLayer_overview.visible = true;
+        nloLayer_overview.visible = true;
+        utilityPointLayer_overview.visible = true;
       } else if (componentSelected === 'Land') {
         pileCapLayer.renderer = pile_cap_renderer_land;
         pierNumberLayer.labelingInfo = pierNumberLayer_label_land;
@@ -161,6 +176,12 @@ function MapPanel() {
         structureLayer.visible = false;
         nloLayer.visible = false;
         utilityPointLayer.visible = false;
+
+        // overview
+        lotLayer_overview.visible = true;
+        structureLayer_overview.visible = false;
+        nloLayer_overview.visible = false;
+        utilityPointLayer_overview.visible = false;
       } else if (componentSelected === 'Structure') {
         pileCapLayer.renderer = pile_cap_renderer_structure;
         pierNumberLayer.labelingInfo = pierNumberLayer_label_struc;
@@ -168,6 +189,12 @@ function MapPanel() {
         structureLayer.visible = true;
         nloLayer.visible = false;
         utilityPointLayer.visible = false;
+
+        // Overview
+        lotLayer_overview.visible = false;
+        structureLayer_overview.visible = true;
+        nloLayer_overview.visible = false;
+        utilityPointLayer_overview.visible = false;
       } else if (componentSelected === 'ISF') {
         pileCapLayer.renderer = pile_cap_renderer_nlo;
         pierNumberLayer.labelingInfo = pierNumberLayer_label_nlo;
@@ -175,6 +202,12 @@ function MapPanel() {
         structureLayer.visible = false;
         nloLayer.visible = true;
         utilityPointLayer.visible = false;
+
+        // Overview
+        lotLayer_overview.visible = false;
+        structureLayer_overview.visible = false;
+        nloLayer_overview.visible = true;
+        utilityPointLayer_overview.visible = false;
       } else if (componentSelected === 'Utility') {
         pileCapLayer.renderer = pile_cap_renderer_utility;
         pierNumberLayer.labelingInfo = pierNumberLayer_label_utility;
@@ -182,6 +215,12 @@ function MapPanel() {
         structureLayer.visible = false;
         nloLayer.visible = false;
         utilityPointLayer.visible = true;
+
+        // Overview
+        lotLayer_overview.visible = false;
+        structureLayer_overview.visible = false;
+        nloLayer_overview.visible = false;
+        utilityPointLayer_overview.visible = true;
       }
     }
   }, [cpValueSelected, componentSelected]);
@@ -194,7 +233,6 @@ function MapPanel() {
   }, [cpValueSelected, componentSelected]);
 
   // Feature Selection
-
   useEffect(() => {
     stripMapLayer.when(() => {
       view.on('click', (event: any) => {
@@ -205,21 +243,33 @@ function MapPanel() {
             if (result.graphic.layer) {
               const layer_name = result.graphic.layer.title;
               if (layer_name === 'Strip Map') {
+                // view rotate
                 view.rotation = 305;
-                const url = result.graphic.attributes['PhotoURL'];
-                setSelectedStrip(result.graphic.attributes['OBJECTID']);
-                setImagePopup(true);
-                setCloseCustomPopup(false);
-                setImageDisplay(url === null ? null : url);
 
-                // Highlight selected strip
-                // view.whenLayerView(stripMapLayer).then((layerView: any) => {
-                //   highlight = layerView.highlight(result.graphic.attributes['OBJECTID']);
-                //   layerView.filter = new FeatureFilter({
-                //     where: undefined,
-                //   });
-                //   highlight.remove();
-                // });
+                // overview new extent
+                const page_number = result.graphic.attributes['PageNumber'];
+                const angle = result.graphic.attributes['Angle'];
+                stripMapLayer_overview.definitionExpression = 'PageNumber = ' + page_number;
+
+                const xmax = result.graphic.geometry.extent.xmax;
+                const ymax = result.graphic.geometry.extent.ymax;
+                const xmin = result.graphic.geometry.extent.xmin;
+                const ymin = result.graphic.geometry.extent.ymin;
+
+                const new_extent = new Extent({
+                  xmax: xmax,
+                  ymax: ymax,
+                  xmin: xmin,
+                  ymin: ymin,
+                  spatialReference: {
+                    wkid: 102100,
+                  },
+                });
+                overView.extent = new_extent;
+                overView.rotation = 360 - angle;
+                overView.zoom = 17;
+
+                setSelectedStrip(result.graphic.attributes['OBJECTID']);
               }
             }
           }
@@ -235,9 +285,6 @@ function MapPanel() {
       view.whenLayerView(stripMapLayer).then((layerView: any) => {
         highlight = layerView.highlight(selectedStrip);
         view.on('click', () => {
-          layerView.filter = new FeatureFilter({
-            where: undefined,
-          });
           highlight.remove();
         });
       });
@@ -246,57 +293,6 @@ function MapPanel() {
   return (
     <>
       <div className="mapDiv" ref={mapDiv}></div>
-
-      {/* Image*/}
-      <div
-        style={{
-          display:
-            imagePopup === true && closeCustomPopup === false
-              ? 'block'
-              : imagePopup === false && closeCustomPopup === true
-                ? 'none'
-                : 'none',
-        }}
-      >
-        <CalciteAction
-          data-action-id="custom-popup"
-          icon="x"
-          text="close"
-          id="close-popup"
-          //textEnabled={true}
-          onClick={(event: any) => {
-            // setNextWidget(event.target.id);
-            setCloseCustomPopup(closeCustomPopup === false ? true : false);
-            setImagePopup(imagePopup === true ? false : true);
-          }}
-          style={{
-            position: 'fixed',
-            zIndex: '2',
-            bottom: 5,
-            left: 15,
-          }}
-        ></CalciteAction>
-        <img
-          style={{
-            display:
-              imagePopup === true && closeCustomPopup === false
-                ? 'block'
-                : imagePopup === false && closeCustomPopup === true
-                  ? 'none'
-                  : 'none',
-            height: '40%',
-            width: '85%',
-            position: 'fixed',
-            zIndex: '1',
-            bottom: 5,
-            left: 15,
-            // borderStyle: 'solid',
-            // borderInlineWidth: '0.5px',
-          }}
-          // src="https://EijiGorilla.github.io/Symbols/Gallery/Train_Operation_20240711.jpg"
-          src={imageDisplay ? imageDisplay : null}
-        />
-      </div>
 
       {/* Control Panel*/}
       <div
@@ -308,15 +304,10 @@ function MapPanel() {
           <ComponentListDisplay />
         </CalciteCard>
       </div>
-      {/* Overview Map*/}
-      {/* <div
-        className="overviewMapdDiv"
-        ref={overviewMapDiv}
-        style={{
-          position: 'fixed',
-          top: controlPanelExpanded === false ? '50px' : '200px',
-        }}
-      ></div> */}
+
+      <div id="overviewpanel">
+        <div className="overviewMapdDiv" ref={overviewMapDiv}></div>
+      </div>
 
       {/* Updated date */}
       <div

@@ -14,6 +14,7 @@ import {
   labelStation_fontSize,
   labelStation_fontSize_default,
   strip_map_uniqueValueInfos,
+  strip_map_uniqueValueInfos_overview,
   util_marker_size,
 } from './UniqueValues';
 
@@ -177,10 +178,12 @@ export const stripMapLayer = new FeatureLayer({
       url: 'https://gis.railway-sector.com/portal',
     },
   },
-  outFields: ['PhotoURL'],
+  outFields: ['PhotoURL', 'PageNumber', 'Angle'],
   title: 'Strip Map',
   popupEnabled: false,
   renderer: stripMapRenderer,
+  maxScale: 5000,
+  minScale: 0,
 });
 
 /* Pile Cap */
@@ -232,7 +235,7 @@ export const pileCapLayer = new FeatureLayer({
   },
 
   title: 'Pile Cap',
-  minScale: 150000,
+  minScale: 10000,
   maxScale: 0,
   renderer: pile_cap_renderer_all,
   popupEnabled: false,
@@ -643,6 +646,7 @@ const struc_layer_renderer = new UniqueValueRenderer({
         color: color_nonworkable_obstruction,
         // style: 'backward-diagonal',
         outline: {
+          style: 'short-dash',
           width: 1,
           color: 'black',
         },
@@ -832,7 +836,52 @@ export const utilityPointLayer = new FeatureLayer({
   popupEnabled: false,
 });
 
+///////////////////////////////////////////////////////
 // ----------------- Overview Map ----------------//
+export const n2StationLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: 'ace32f63bafc40f6bcfeecbee5fa6c69',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 1,
+  title: 'Station',
+  popupEnabled: false,
+  definitionExpression: "Station <> 'NCC'",
+  renderer: stationPointSymbol_nscrex,
+  labelingInfo: [n2LabelStation], //[n2LabelStation],
+  opacity: opacity,
+});
+n2StationLayer_overview.listMode = 'hide';
+
+export const pileCapLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: '6f4bf8c34d344277bb69f6590096203f',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+
+  title: 'Pile Cap',
+  // minScale: 150000,
+  // maxScale: 0,
+  renderer: pile_cap_renderer_all,
+  popupEnabled: false,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+});
+
+export const prowLayer_overview = new FeatureLayer({
+  url: 'https://gis.railway-sector.com/server/rest/services/N2_Alignment/FeatureServer/1',
+  layerId: 1,
+  title: 'PROW',
+  popupEnabled: false,
+  renderer: prowRenderer,
+});
+prowLayer_overview.listMode = 'hide';
+
 export const lineSymbolOverview_nscrex = new SimpleRenderer({
   symbol: new SimpleLineSymbol({
     color: centerlineProjectColor.nscrex_hex,
@@ -851,6 +900,127 @@ export const n2CenterlineOverView = new FeatureLayer({
   renderer: lineSymbolOverview_nscrex,
   layerId: 2,
   popupEnabled: false,
+});
+
+export const lotLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: '23500954a8d84a46886e76e6e0883a69',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 4,
+  labelingInfo: [lotIdLabel],
+  renderer: lot_layer_renderer,
+  // popupTemplate: templateLot,
+  title: 'Land Acquisition',
+  minScale: 20000,
+  maxScale: 0,
+  //labelsVisible: false,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+});
+
+export const structureLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: '23500954a8d84a46886e76e6e0883a69',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 3,
+  labelingInfo: [strucLabel],
+  renderer: struc_layer_renderer,
+  definitionExpression: "Obstruction = 'Yes'",
+  // popupTemplate: templateLot,
+  title: 'Structure',
+  minScale: 1500,
+  maxScale: 0,
+  popupEnabled: false,
+  //labelsVisible: false,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+});
+
+export const nloLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: '23500954a8d84a46886e76e6e0883a69',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 1,
+  renderer: nlo_renderer,
+  definitionExpression: 'StatusRC <> 1',
+  title: 'NLO (Non-Land Owner)',
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+  minScale: 3000,
+  maxScale: 0,
+  popupEnabled: false,
+});
+
+export const utilityPointLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: '7507e625f480470a9af257d60cf67c1c',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 1,
+  title: 'Utility',
+  minScale: 5000,
+  maxScale: 0,
+  renderer: utility_marker_renderer,
+  popupEnabled: false,
+});
+
+export const pierNumberLayer_overview = new FeatureLayer(
+  {
+    portalItem: {
+      id: '876de8483da9485aac5df737cbef2143',
+      portal: {
+        url: 'https://gis.railway-sector.com/portal',
+      },
+    },
+    layerId: 6,
+    renderer: pier_number_point_renderer,
+    labelingInfo: [pier_number_label_workable_all, pier_number_label_nonworkable_all],
+    title: 'Pier Number', //'Pier with Access Date (as of October 2023)',
+    minScale: 150000,
+    maxScale: 0,
+    popupEnabled: false,
+    elevationInfo: {
+      mode: 'on-the-ground',
+    },
+  },
+  //{ utcOffset: 300 },
+);
+pierNumberLayer_overview.listMode = 'hide';
+
+/* Strip Map Index  */
+// const stripMapRenderer_overview = new UniqueValueRenderer({
+//   field: 'NonWorkable',
+//   uniqueValueInfos: strip_map_uniqueValueInfos_overview,
+// });
+
+export const stripMapLayer_overview = new FeatureLayer({
+  portalItem: {
+    id: '2f183f5686314b958a4e13a811960c12',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  outFields: ['PhotoURL', 'PageNumber'],
+  title: 'Strip Map',
+  popupEnabled: false,
+  visible: false,
+  // renderer: stripMapRenderer_overview,
+  // maxScale: 0,
+  // minScale: 1000,
 });
 
 // date table

@@ -11,15 +11,24 @@ import Print from '@arcgis/core/widgets/Print';
 import {
   cp_break_lines,
   lotLayer,
+  lotLayer_overview,
   n2CenterlineOverView,
   n2StationLayer,
+  n2StationLayer_overview,
   nloLayer,
+  nloLayer_overview,
   pierNumberLayer,
+  pierNumberLayer_overview,
   pileCapLayer,
+  pileCapLayer_overview,
   prowLayer,
+  prowLayer_overview,
   stripMapLayer,
+  stripMapLayer_overview,
   structureLayer,
+  structureLayer_overview,
   utilityPointLayer,
+  utilityPointLayer_overview,
 } from './layers';
 import Basemap from '@arcgis/core/Basemap';
 import VectorTileLayer from '@arcgis/core/layers/VectorTileLayer';
@@ -63,23 +72,24 @@ export const basemaps = new BasemapGallery({
   container: undefined,
 });
 
-// export const overViewMap = new Map({
-//   basemap: 'gray-vector', // "streets-night-vector", basemap
-// });
+export const overViewMap = new Map({
+  basemap: 'gray-vector', // "streets-night-vector", basemap
+});
 
-// export const overView = new MapView({
-//   map: overViewMap,
-//   container: undefined,
-//   center: overViewCenter,
-//   zoom: zoom_overview,
-//   //extent: fixedExtent,
-//   constraints: {
-//     rotationEnabled: false,
-//   },
-//   ui: {
-//     components: ['attribution'],
-//   },
-// });
+export const overView = new MapView({
+  map: overViewMap,
+  container: undefined,
+  center: overViewCenter,
+  zoom: 16,
+  rotation: 305,
+  //extent: fixedExtent,
+  // constraints: {
+  //   rotationEnabled: false,
+  // },
+  ui: {
+    components: [],
+  },
+});
 
 // add layer
 map.add(prowLayer);
@@ -93,11 +103,25 @@ map.add(n2StationLayer);
 map.add(cp_break_lines);
 map.add(stripMapLayer);
 
-// overViewMap.add(n2CenterlineOverView);
+overViewMap.add(prowLayer_overview);
+overViewMap.add(n2CenterlineOverView);
+overViewMap.add(pierNumberLayer_overview);
+overViewMap.add(lotLayer_overview);
+overViewMap.add(structureLayer_overview);
+overViewMap.add(pileCapLayer_overview);
+overViewMap.add(nloLayer_overview);
+overViewMap.add(utilityPointLayer_overview);
+overViewMap.add(n2StationLayer_overview);
+overViewMap.add(stripMapLayer_overview);
 
 // Compass
 export const compass = new Compass({
   view: view,
+  container: undefined,
+});
+
+export const compass_overview = new Compass({
+  view: overView,
   container: undefined,
 });
 
@@ -108,13 +132,11 @@ export const controlPanelExpand = new Expand({
   content: undefined,
 });
 
-// Station Name (NSCR, NSCR-Ex)
-export const stationExpand = new Expand({
-  view: view,
+// Overview expand
+export const overViewExpand = new Expand({
+  view,
   expanded: false,
   content: undefined,
-  expandTooltip: 'Station List',
-  expandIcon: 'list',
 });
 
 export const layerList = new LayerList({

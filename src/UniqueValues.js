@@ -3,6 +3,7 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import { SimpleMarkerSymbol, SimpleLineSymbol, TextSymbol, Font } from '@arcgis/core/symbols';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Extent from '@arcgis/core/geometry/Extent';
 
 //
 export const pointSymbol = new SimpleRenderer({
@@ -75,6 +76,34 @@ export const strip_map_uniqueValueInfos = [
       outline: {
         width: 0.8,
         color: 'black',
+      },
+    }),
+  },
+];
+
+export const color_workable_obstruction_overview = [152, 230, 0, 0.5];
+export const color_nonworkable_obstruction_overview = [255, 0, 0, 0.4];
+
+export const strip_map_uniqueValueInfos_overview = [
+  {
+    value: 'No',
+    label: 'Workable',
+    symbol: new SimpleFillSymbol({
+      color: null,
+      outline: {
+        width: 0.8,
+        color: color_workable_obstruction_overview,
+      },
+    }),
+  },
+  {
+    value: 'Yes',
+    label: 'Non-Workable',
+    symbol: new SimpleFillSymbol({
+      color: null,
+      outline: {
+        width: 0.8,
+        color: color_nonworkable_obstruction_overview,
       },
     }),
   },
@@ -172,4 +201,14 @@ export const primaryLabelColor = '#9ca3af';
 
 // Overview Map: ----------------------------------
 export const overViewCenter = [120.6736473, 15.0422548];
+const default_extent = new Extent({
+  xmax: 13446763.797407571,
+  ymax: 1675633.4248131101,
+  xmin: 13446180.965066897,
+  ymin: 1675002.8193297577,
+  spatialReference: {
+    wkid: 102100,
+  },
+});
+export const overViewDefaultExtent = default_extent;
 export const zoom_overview = 7;

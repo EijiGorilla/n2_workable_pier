@@ -1,18 +1,21 @@
 /* eslint-disable prettier/prettier */
-import { SimpleFillSymbol } from '@arcgis/core/symbols';
 import {
   dateTable,
-  n2_station_label,
-  n2LabelStation,
-  n2StationLayer,
-  stationPointSymbol_nscrex,
+  lotLayer,
+  lotLayer_overview,
+  nloLayer,
+  nloLayer_overview,
+  pierNumberLayer,
+  pileCapLayer,
+  stripMapLayer,
+  structureLayer,
+  structureLayer_overview,
+  utilityPointLayer,
+  utilityPointLayer_overview,
 } from './layers';
 // import { overView, view } from './Scene';
 import { view } from './Scene';
-import { home_rotation, labelStation_fontSize_default, primaryLabelColor } from './UniqueValues';
-import Graphic from '@arcgis/core/Graphic';
-import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
-import * as promiseUtils from '@arcgis/core/core/promiseUtils';
+import { home_rotation } from './UniqueValues';
 
 export function lastDateOfMonth(date: Date) {
   const old_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -66,91 +69,79 @@ export async function dateUpdate(category: any) {
   });
 }
 
+// Filter Pile CAP by CP
+
+export function filterPileCapByCP(cp: any) {
+  const query_cp = "CP = '" + cp + "'";
+  pileCapLayer.definitionExpression = query_cp;
+  pierNumberLayer.definitionExpression = query_cp;
+  lotLayer.definitionExpression = query_cp;
+  structureLayer.definitionExpression = query_cp;
+  nloLayer.definitionExpression = query_cp;
+  utilityPointLayer.definitionExpression = query_cp;
+  stripMapLayer.definitionExpression = query_cp;
+
+  // Overview
+  lotLayer_overview.definitionExpression = query_cp;
+  structureLayer_overview.definitionExpression = query_cp;
+  nloLayer_overview.definitionExpression = query_cp;
+  utilityPointLayer_overview.definitionExpression = query_cp;
+}
+
 // Overview Map constraint
-// export function disableZooming(overView: any) {
-//   overView.popup.dockEnabled = true;
+export function disableZooming(overView: any) {
+  overView.popup.dockEnabled = true;
 
-//   // Removes the zoom action on the popup
-//   overView.popup.actions = [];
+  // Removes the zoom action on the popup
+  overView.popup.actions = [];
 
-//   // stops propagation of default behavior when an event fires
-//   function stopEvtPropagation(event: any) {
-//     event.stopPropagation();
-//   }
+  // stops propagation of default behavior when an event fires
+  function stopEvtPropagation(event: any) {
+    event.stopPropagation();
+  }
 
-//   // exlude the zoom widget from the default UI
-//   view.ui.components = [];
-//   overView.ui.components = [];
+  // exlude the zoom widget from the default UI
+  view.ui.components = [];
+  overView.ui.components = [];
 
-//   // disable mouse wheel scroll zooming on the overView
-//   overView.on('mouse-wheel', stopEvtPropagation);
+  // disable mouse wheel scroll zooming on the overView
+  overView.on('mouse-wheel', stopEvtPropagation);
 
-//   // disable zooming via double-click on the overView
-//   overView.on('double-click', stopEvtPropagation);
+  // disable zooming via double-click on the overView
+  overView.on('double-click', stopEvtPropagation);
 
-//   // disable zooming out via double-click + Control on the overView
-//   overView.on('double-click', ['Control'], stopEvtPropagation);
+  // disable zooming out via double-click + Control on the overView
+  overView.on('double-click', ['Control'], stopEvtPropagation);
 
-//   // disables pinch-zoom and panning on the overView
-//   overView.on('drag', stopEvtPropagation);
+  // disables pinch-zoom and panning on the overView
+  overView.on('drag', stopEvtPropagation);
 
-//   // disable the overView's zoom box to prevent the Shift + drag
-//   // and Shift + Control + drag zoom gestures.
-//   overView.on('drag', ['Shift'], stopEvtPropagation);
-//   overView.on('drag', ['Shift', 'Control'], stopEvtPropagation);
+  // disable the overView's zoom box to prevent the Shift + drag
+  // and Shift + Control + drag zoom gestures.
+  overView.on('drag', ['Shift'], stopEvtPropagation);
+  overView.on('drag', ['Shift', 'Control'], stopEvtPropagation);
 
-//   // prevents zooming with the + and - keys
-//   overView.on('key-down', (event: any) => {
-//     const prohibitedKeys = [
-//       '+',
-//       '-',
-//       'Shift',
-//       '_',
-//       '=',
-//       'ArrowUp',
-//       'ArrowDown',
-//       'ArrowRight',
-//       'ArrowLeft',
-//     ];
-//     const keyPressed = event.key;
-//     if (prohibitedKeys.indexOf(keyPressed) !== -1) {
-//       event.stopPropagation();
-//     }
-//   });
+  // prevents zooming with the + and - keys
+  overView.on('key-down', (event: any) => {
+    const prohibitedKeys = [
+      '+',
+      '-',
+      'Shift',
+      '_',
+      '=',
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowRight',
+      'ArrowLeft',
+    ];
+    const keyPressed = event.key;
+    if (prohibitedKeys.indexOf(keyPressed) !== -1) {
+      event.stopPropagation();
+    }
+  });
 
-//   return overView;
-// }
-
-// const extentDebouncer = promiseUtils.debounce((extent3Dgraphic: any, extent: any) => {
-//   extent3Dgraphic.geometry = extent;
-// });
-
-// export function setup() {
-//   let initialGeometry: any = null;
-//   const extent3Dgraphic = new Graphic({
-//     geometry: initialGeometry, // default: null
-//     symbol: new SimpleFillSymbol({
-//       color: [0, 0, 0, 0],
-//       outline: {
-//         width: 2,
-//         color: '#ff1947', //[178,34,34]
-//       },
-//     }),
-//   });
-//   overView.graphics.add(extent3Dgraphic);
-
-//   reactiveUtils.watch(
-//     () => view.extent,
-//     (extent: any) => {
-//       // Sync the overview map location
-//       // whenever the 3d view is stationary
-//       extentDebouncer(extent3Dgraphic, extent);
-//     },
-//     {
-//       initial: true,
-//     },
-//   );
-// }
+  return overView;
+}
 
 // Zoom to layer
 export function zoomToLayer(layer: any) {
