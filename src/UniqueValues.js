@@ -134,7 +134,7 @@ const pier_number_halo_color = '#4E4E4E';
 
 /* eslint-disable prettier/prettier */
 // Updated Dates
-export const updatedDateCategoryNames = 'Progress Summary Gauge';
+export const updatedDateCategoryNames = 'Viaduct';
 export const cutoff_days = 30;
 
 // Date Picker
