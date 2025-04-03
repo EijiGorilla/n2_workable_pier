@@ -10,6 +10,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import {
   color_nonworkable_obstruction,
+  color_nonworkable_obstruction_struc,
   color_workable_obstruction,
   labelStation_fontSize,
   labelStation_fontSize_default,
@@ -40,7 +41,7 @@ export const workable_fields = [
   'NLOWorkable',
   'UtilWorkable',
 ];
-export const color_workable = '#98E600';
+export const color_workable = '#38A800';
 export const color_nonworkable = '#FF0000';
 export const workable_piers_uniqueValueInfos = [
   {
@@ -597,7 +598,7 @@ const struc_layer_renderer = new UniqueValueRenderer({
       value: 'Yes',
       label: 'Obstruction',
       symbol: new SimpleFillSymbol({
-        color: color_nonworkable_obstruction,
+        color: color_nonworkable_obstruction_struc,
         // style: 'backward-diagonal',
         outline: {
           style: 'short-dash',

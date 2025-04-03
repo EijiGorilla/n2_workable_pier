@@ -174,7 +174,6 @@ function MapPanel() {
   useEffect(() => {
     if (cpValueSelected || componentSelected) {
       filterPileCapByCP(cpValueSelected);
-
       // zoomToLayer(pierNumberLayer);
 
       if (componentSelected === 'All') {

@@ -30,6 +30,7 @@ export const color_workable = '#98E600';
 export const color_nonworkable = '#FF0000';
 export const color_workable_obstruction = [152, 230, 0, 0.5];
 export const color_nonworkable_obstruction = [255, 0, 0, 0.4];
+export const color_nonworkable_obstruction_struc = [104, 104, 104, 0.4];
 export const workable_piers_uniqueValueInfos = [
   {
     value: 0,
