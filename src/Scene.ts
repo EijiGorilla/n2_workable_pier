@@ -165,7 +165,7 @@ export const legend_workable_overview = new Legend({
   layerInfos: [
     {
       layer: pileCapLayer_overview,
-      title: 'Piers',
+      title: 'Pile Cap',
     },
     {
       layer: lotLayer_overview,

@@ -14,7 +14,7 @@ import {
 
 function ComponentListData() {
   const [componentSelected, setComponentValueSelected] = useState<any>('All');
-  const projectLabel = ['All', 'Land', 'Structure', 'ISF', 'Utility'];
+  const projectLabel = ['All', 'Land', 'Structure', 'ISF', 'Utility', 'Others'];
 
   // handle change event of the project
   const handleComponentListChange = (obj: any) => {

@@ -21,8 +21,14 @@ import { dateUpdate, disableZooming, filterPileCapByCP, zoomToLayer } from '../Q
 import '@esri/calcite-components/dist/components/calcite-card';
 import '@esri/calcite-components/dist/components/calcite-button';
 import { CalciteCard } from '@esri/calcite-components-react';
-import ComponentListDisplay, { useComponentListContext } from './ComponentContext';
-import ContractPackageDisplay, { useContractPackageContext } from './ContractPackageContext';
+import ComponentListDisplay, {
+  ComponentListDataProvider,
+  useComponentListContext,
+} from './ComponentContext';
+import ContractPackageDisplay, {
+  ContractPackageDataProvider,
+  useContractPackageContext,
+} from './ContractPackageContext';
 import { cutoff_days, updatedDateCategoryNames } from '../UniqueValues';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
 import {
@@ -50,6 +56,7 @@ import {
   pileCapLayer_overview,
 } from '../layers';
 import Extent from '@arcgis/core/geometry/Extent';
+import WorkablePileCapChart from './WorkablePileCapChart';
 
 function MapPanel() {
   const mapDiv = useRef(null);
@@ -174,7 +181,7 @@ function MapPanel() {
   useEffect(() => {
     if (cpValueSelected || componentSelected) {
       filterPileCapByCP(cpValueSelected);
-      // zoomToLayer(pierNumberLayer);
+      zoomToLayer(pileCapLayer);
 
       if (componentSelected === 'All') {
         pileCapLayer.renderer = pile_cap_renderer_all;
@@ -323,6 +330,12 @@ function MapPanel() {
   return (
     <>
       <div className="mapDiv" ref={mapDiv}></div>
+      {/* Workable Pile Cap Chart */}
+      <ContractPackageDataProvider>
+        <ComponentListDataProvider>
+          <WorkablePileCapChart />
+        </ComponentListDataProvider>
+      </ContractPackageDataProvider>
 
       {/* Control Panel*/}
       <div

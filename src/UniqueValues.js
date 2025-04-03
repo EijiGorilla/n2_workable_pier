@@ -1,7 +1,5 @@
-import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
 import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
-import { SimpleMarkerSymbol, SimpleLineSymbol, TextSymbol, Font } from '@arcgis/core/symbols';
-import LabelClass from '@arcgis/core/layers/support/LabelClass';
+import { SimpleMarkerSymbol } from '@arcgis/core/symbols';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Extent from '@arcgis/core/geometry/Extent';
 
@@ -26,8 +24,9 @@ export const workable_fields = [
   'NLOWorkable',
   'UtilWorkable',
 ];
-export const color_workable = '#98E600';
+export const color_workable = '#38A800';
 export const color_nonworkable = '#FF0000';
+export const color_completed = '#0070ff';
 export const color_workable_obstruction = [152, 230, 0, 0.5];
 export const color_nonworkable_obstruction = [255, 0, 0, 0.4];
 export const color_nonworkable_obstruction_struc = [104, 104, 104, 0.4];
@@ -54,10 +53,21 @@ export const workable_piers_uniqueValueInfos = [
       },
     }),
   },
+  {
+    value: 2,
+    label: 'Completed',
+    symbol: new SimpleFillSymbol({
+      color: color_completed,
+      outline: {
+        width: 1,
+        color: 'black',
+      },
+    }),
+  },
 ];
 
 export const xoffset_pierNumber = 0;
-export const yoffset_pierNumber = 10;
+export const yoffset_pierNumber = 13;
 
 // Strip Map Layer
 export const strip_map_uniqueValueInfos = [
@@ -113,8 +123,6 @@ export const strip_map_uniqueValueInfos_overview = [
   },
 ];
 
-/////
-
 export const minScale = 577790;
 export const minScale_stNumber = minScale + 1000;
 export const maxScale = 0;
@@ -128,13 +136,13 @@ export const centerlineProjectColor = {
   nscrex_hex: '#ff5f22', //"#00b3ff","#00B0F0", "#15C2FF"
 };
 
-const pointColor = 'white';
+export const pointColor = 'white';
 export const pointSize = '12px'; // original: 10px
 export const pointOutlineWidth = 2.5; // original: 1.5
 export const labelStation_fontSize = 11;
 export const labelStation_fontSize_default = 11.5;
 
-const pier_number_halo_color = '#4E4E4E';
+export const pier_number_halo_color = '#9C9C9C'; // '#4E4E4E';
 
 /* eslint-disable prettier/prettier */
 // Updated Dates

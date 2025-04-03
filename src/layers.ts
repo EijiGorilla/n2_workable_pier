@@ -6,87 +6,30 @@ import { SimpleMarkerSymbol, SimpleLineSymbol, TextSymbol, Font } from '@arcgis/
 
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
-import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import {
+  centerlineProjectColor,
+  color_completed,
+  color_nonworkable,
   color_nonworkable_obstruction,
   color_nonworkable_obstruction_struc,
-  color_workable_obstruction,
+  color_workable,
   labelStation_fontSize,
-  labelStation_fontSize_default,
+  lineWidth,
+  maxScale,
+  minScale,
+  opacity,
+  pier_number_halo_color,
+  pointColor,
+  pointOutlineWidth,
+  pointSize,
   strip_map_uniqueValueInfos,
-  strip_map_uniqueValueInfos_overview,
   util_marker_size,
+  workable_fields,
+  workable_piers_uniqueValueInfos,
   xoffset_pierNumber,
   yoffset_pierNumber,
 } from './UniqueValues';
-
-/////// Universal Renderere
-export const pointSymbol = new SimpleRenderer({
-  symbol: new SimpleMarkerSymbol({
-    style: 'circle',
-    color: [0, 0, 0, 0.2],
-    size: '3px',
-    outline: {
-      color: [0, 0, 0, 0],
-      width: 0.5,
-    },
-  }),
-});
-
-export const workable_fields = [
-  'AllWorkable',
-  'LandWorkable',
-  'StrucWorkable',
-  'NLOWorkable',
-  'UtilWorkable',
-];
-export const color_workable = '#38A800';
-export const color_nonworkable = '#FF0000';
-export const workable_piers_uniqueValueInfos = [
-  {
-    value: 0,
-    label: 'Non-Workable',
-    symbol: new SimpleFillSymbol({
-      color: color_nonworkable,
-      outline: {
-        width: 1,
-        color: 'black',
-      },
-    }),
-  },
-  {
-    value: 1,
-    label: 'Workable',
-    symbol: new SimpleFillSymbol({
-      color: color_workable,
-      outline: {
-        width: 1,
-        color: 'black',
-      },
-    }),
-  },
-];
-
-export const minScale = 577790;
-export const minScale_stNumber = minScale + 1000;
-export const maxScale = 0;
-export const maxScale_stNumber = 288896; //288896
-export const opacity = 1;
-
-export const lineWidth = '6px';
-export const centerlineProjectColor = {
-  nscr_hex: '#ff5f22',
-  mmsp_hex: '#00b7ff', //"#0000ff"
-  nscrex_hex: '#ff5f22', //"#00b3ff","#00B0F0", "#15C2FF"
-};
-
-const pointColor = 'white';
-export const pointSize = '12px'; // original: 10px
-export const pointOutlineWidth = 2.5; // original: 1.5
-
-const pier_number_halo_color = '828282'; // '#4E4E4E';
-/////////////////////////////////////////////////////////////////////
 
 export const stationPointSymbol_nscrex = new SimpleRenderer({
   symbol: new SimpleMarkerSymbol({
@@ -203,7 +146,7 @@ export const pier_number_label_workable_all = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -221,7 +164,7 @@ export const pier_number_label_nonworkable_all = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -235,11 +178,29 @@ export const pier_number_label_nonworkable_all = new LabelClass({
   where: 'AllWorkable = 0',
 });
 
+export const pier_number_label_completed_all = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_completed,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'always-horizontal',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'AllWorkable = 2',
+});
+
 export const pier_number_label_workable_land = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -257,7 +218,7 @@ export const pier_number_label_nonworkable_land = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -271,11 +232,29 @@ export const pier_number_label_nonworkable_land = new LabelClass({
   where: 'LandWorkable = 0',
 });
 
+export const pier_number_label_completed_land = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_completed,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'always-horizontal',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'AllWorkable = 2',
+});
+
 export const pier_number_label_workable_struc = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -293,7 +272,7 @@ export const pier_number_label_nonworkable_struc = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -307,11 +286,29 @@ export const pier_number_label_nonworkable_struc = new LabelClass({
   where: 'StrucWorkable = 0',
 });
 
+export const pier_number_label_completed_struc = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_completed,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'always-horizontal',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'AllWorkable = 2',
+});
+
 export const pier_number_label_workable_nlo = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -329,7 +326,7 @@ export const pier_number_label_nonworkable_nlo = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -343,11 +340,29 @@ export const pier_number_label_nonworkable_nlo = new LabelClass({
   where: 'NLOWorkable = 0',
 });
 
+export const pier_number_label_completed_nlo = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_completed,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'always-horizontal',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'AllWorkable = 2',
+});
+
 export const pier_number_label_workable_utility = new LabelClass({
   symbol: new TextSymbol({
     color: color_workable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -365,7 +380,7 @@ export const pier_number_label_nonworkable_utility = new LabelClass({
   symbol: new TextSymbol({
     color: color_nonworkable,
     haloColor: pier_number_halo_color,
-    haloSize: 0.5,
+    haloSize: 0.3,
     yoffset: yoffset_pierNumber,
     font: {
       size: 10,
@@ -379,30 +394,53 @@ export const pier_number_label_nonworkable_utility = new LabelClass({
   where: 'UtilWorkable = 0',
 });
 
+export const pier_number_label_completed_utility = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_completed,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'always-horizontal',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'AllWorkable = 2',
+});
+
 // Workable piers for labels
 export const pierNumberLayer_label_all = [
   pier_number_label_nonworkable_all,
   pier_number_label_workable_all,
+  pier_number_label_completed_all,
 ];
 
 export const pierNumberLayer_label_land = [
   pier_number_label_nonworkable_land,
   pier_number_label_workable_land,
+  pier_number_label_completed_land,
 ];
 
 export const pierNumberLayer_label_struc = [
   pier_number_label_nonworkable_struc,
   pier_number_label_workable_struc,
+  pier_number_label_completed_struc,
 ];
 
 export const pierNumberLayer_label_nlo = [
   pier_number_label_nonworkable_nlo,
   pier_number_label_workable_nlo,
+  pier_number_label_completed_nlo,
 ];
 
 export const pierNumberLayer_label_utility = [
   pier_number_label_nonworkable_utility,
   pier_number_label_workable_utility,
+  pier_number_label_completed_utility,
 ];
 
 export const pier_number_point_renderer = new SimpleRenderer({
@@ -483,7 +521,7 @@ export const n2LabelStation = new LabelClass({
   deconflictionStrategy: 'none', // show overlapping numbers
   labelPlacement: 'center-left',
   labelExpressionInfo: {
-    expression: '$feature.Station',
+    expression: '$feature.StnName',
   },
   minScale: minScale,
   maxScale: maxScale,
@@ -569,8 +607,9 @@ export const lotLayer = new FeatureLayer({
   definitionExpression: "OwnershipType = 0 and Obstruction = 'Yes'",
   minScale: 20000,
   maxScale: 0,
-  popupEnabled: false,
-  //labelsVisible: false,
+  popupTemplate: {
+    title: 'Status: {StatusLA}',
+  },
   elevationInfo: {
     mode: 'on-the-ground',
   },
