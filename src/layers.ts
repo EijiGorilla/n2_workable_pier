@@ -608,7 +608,8 @@ export const lotLayer = new FeatureLayer({
   minScale: 20000,
   maxScale: 0,
   popupTemplate: {
-    title: 'Status: {StatusLA}',
+    title: '{LotID}: {StatusLA}',
+    lastEditInfoEnabled: false,
   },
   elevationInfo: {
     mode: 'on-the-ground',
@@ -676,7 +677,10 @@ export const structureLayer = new FeatureLayer({
   title: 'Structure',
   minScale: 2500,
   maxScale: 0,
-  popupEnabled: false,
+  popupTemplate: {
+    title: '{StrucID}: {StatusStruc}',
+    lastEditInfoEnabled: false,
+  },
   //labelsVisible: false,
   elevationInfo: {
     mode: 'on-the-ground',
@@ -737,14 +741,17 @@ export const nloLayer = new FeatureLayer({
   },
   layerId: 1,
   renderer: nlo_renderer,
-  definitionExpression: 'StatusRC <> 1',
+  definitionExpression: 'StatusRC > 1',
   title: 'NLO (Non-Land Owner)',
   elevationInfo: {
     mode: 'on-the-ground',
   },
   minScale: 3000,
   maxScale: 0,
-  popupEnabled: false,
+  popupTemplate: {
+    title: '{StrucID}: {StatusRC}',
+    lastEditInfoEnabled: false,
+  },
 });
 
 // Utility Point
@@ -827,7 +834,10 @@ export const utilityPointLayer = new FeatureLayer({
   minScale: 5000,
   maxScale: 0,
   renderer: utility_marker_renderer,
-  popupEnabled: false,
+  popupTemplate: {
+    title: '{UtilType}: {Status} for {LAYER} work',
+    lastEditInfoEnabled: false,
+  },
 });
 
 ///////////////////////////////////////////////////////
@@ -951,7 +961,7 @@ export const nloLayer_overview = new FeatureLayer({
   },
   layerId: 1,
   renderer: nlo_renderer,
-  definitionExpression: 'StatusRC <> 1',
+  definitionExpression: 'StatusRC > 1',
   title: 'NLO (Non-Land Owner)',
   elevationInfo: {
     mode: 'on-the-ground',

@@ -181,7 +181,7 @@ function MapPanel() {
   useEffect(() => {
     if (cpValueSelected || componentSelected) {
       filterPileCapByCP(cpValueSelected);
-      zoomToLayer(pileCapLayer);
+      // zoomToLayer(pileCapLayer);
 
       if (componentSelected === 'All') {
         pileCapLayer.renderer = pile_cap_renderer_all;

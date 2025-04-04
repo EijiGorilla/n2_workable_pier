@@ -4,6 +4,7 @@ import { view } from '../Scene';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import Query from '@arcgis/core/rest/support/Query';
 import * as am5 from '@amcharts/amcharts5';
+import am5index from '@amcharts/amcharts5/index';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
@@ -67,13 +68,13 @@ const WorkablePileCapChart = () => {
     // Create chart
     var chart = root.container.children.push(
       am5percent.PieChart.new(root, {
-        // centerY: am5.percent(25), //-10
-        // y: am5.percent(-25), // space between pie chart and total lots
-        layout: root.verticalLayout,
+        // centerY: am5.percent(-10), //-10
+        // y: am5.percent(20), // space between pie chart and total lots
+        layout: root.horizontalLayout,
       }),
     );
     chartRef.current = chart;
-    // /// //
+
     // Create series
     var pieSeries = chart.series.push(
       am5percent.PieSeries.new(root, {
@@ -82,7 +83,9 @@ const WorkablePileCapChart = () => {
         valueField: 'value',
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(28),
-        scale: 1.7,
+        scale: 1.8,
+        legendLabelText: '{category}[/] ([#000000; bold]{value.formatNumber("#.")}[/]) ',
+        legendValueText: '', //"{valuePercentTotal.formatNumber('#.')}% ({value})"
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -91,8 +94,8 @@ const WorkablePileCapChart = () => {
     // values inside a donut
     pieSeries.children.push(
       am5.Label.new(root, {
-        text: '[#000000]{valueSum}[/]\n[fontSize: 0.45em; #000000; verticalAlign: super]TOTAL PILE CAP[/]',
-        fontSize: '1.3em',
+        text: '[#000000]{valueSum}[/]\n[fontSize: 0.4em; #000000; verticalAlign: super]TOTAL PILE CAP[/]',
+        fontSize: '1.5em',
         centerX: am5.percent(50),
         centerY: am5.percent(40),
         populateText: true,
@@ -117,30 +120,98 @@ const WorkablePileCapChart = () => {
     });
 
     // Disabling labels and ticksll
-    // pieSeries.labels.template.set('visible', true);
-    // pieSeries.ticks.template.set('visible', true);
+    pieSeries.labels.template.set('visible', false);
+    pieSeries.ticks.template.set('visible', false);
     pieSeries.data.setAll(workableData);
 
     // Disabling labels and ticksll
     // pieSeries.labels.template.setAll({
     //   // fill: am5.color('#ffffff'),
-    //   // fontSize: '0.5rem',
-    //   visible: false,
-    //   scale: 0,
-    //   // oversizedBehavior: 'wrap',
-    //   // maxWidth: 65,
-    //   // text: "{category}: [#C9CC3F; fontSize: 10px;]{valuePercentTotal.formatNumber('#.')}%[/]",
+    //   fontSize: '1.2rem',
+    //   visible: true,
+    //   scale: 0.8,
+    //   oversizedBehavior: 'wrap',
+    //   maxWidth: 140,
+    //   // textType: 'circular',
+    //   // centerX: 0,
+    //   // centerY: 0,
+    //   text: "{category}: [#000000; fontSize: 1.4rem; fontWeight: bold]{value.formatNumber('#.')}[/]",
     // });
 
-    // pieSeries.labels.template.set('visible', true);
     // pieSeries.ticks.template.setAll({
     //   // fillOpacity: 0.9,
     //   // stroke: am5.color('#ffffff'),
     //   // strokeWidth: 0.3,
     //   // strokeOpacity: 1,
-    //   visible: false,
-    //   scale: 0,
+    //   visible: true,
+    //   // scale: 0.5,
     // });
+
+    var legend = chart.children.push(
+      am5.Legend.new(root, {
+        centerX: am5.percent(50),
+        x: am5.percent(68),
+        y: am5.percent(35),
+        // paddingTop: -200,
+        scale: 0.9,
+      }),
+    );
+    legendRef.current = legend;
+    legend.data.setAll(pieSeries.dataItems);
+
+    // Change the size of legend markers
+    legend.markers.template.setAll({
+      width: 18,
+      height: 18,
+    });
+
+    // Change the marker shape
+    legend.markerRectangles.template.setAll({
+      cornerRadiusTL: 10,
+      cornerRadiusTR: 10,
+      cornerRadiusBL: 10,
+      cornerRadiusBR: 10,
+    });
+
+    // Responsive legend
+    // https://www.amcharts.com/docs/v5/tutorials/pie-chart-with-a-legend-with-dynamically-sized-labels/
+    // This aligns Legend to Left
+    chart.onPrivate('width', function (width: any) {
+      const boxWidth = 180; //props.style.width;
+      var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
+      // var availableSpace = (boxWidth - valueLabelsWidth) * 0.7;
+      legend.labels.template.setAll({
+        width: availableSpace,
+        maxWidth: availableSpace,
+      });
+    });
+
+    // To align legend items: valueLabels right, labels to left
+    // 1. fix width of valueLabels
+    // 2. dynamically change width of labels by screen size
+
+    // Change legend labelling properties
+    // To have responsive font size, do not set font size
+    legend.labels.template.setAll({
+      oversizedBehavior: 'truncate',
+      fill: am5.color('#000000'),
+      //textDecoration: "underline"
+      //width: am5.percent(200)
+      //fontWeight: "300"
+    });
+
+    legend.valueLabels.template.setAll({
+      textAlign: 'right',
+      //width: valueLabelsWidth,
+      fill: am5.color('#000000'),
+      // fontSize: '2em',
+    });
+
+    legend.itemContainers.template.setAll({
+      // set space between legend items
+      paddingTop: 3,
+      paddingBottom: 1,
+    });
 
     pieSeries.appear(1000, 100);
 
@@ -151,7 +222,7 @@ const WorkablePileCapChart = () => {
 
   useEffect(() => {
     pieSeriesRef.current?.data.setAll(workableData);
-    // legendRef.current?.data.setAll(pieSeriesRef.current.dataItems);
+    legendRef.current?.data.setAll(pieSeriesRef.current.dataItems);
   });
 
   return (
@@ -159,12 +230,13 @@ const WorkablePileCapChart = () => {
       <div
         id={chartID}
         style={{
-          height: '200px',
-          width: '200px',
+          height: '500px',
+          width: '500px',
           position: 'fixed',
           zIndex: '10',
-          top: 100,
-          left: 0,
+          top: -50,
+          left: -10,
+
           // backgroundColor: 'gray',
         }}
       ></div>
