@@ -20,7 +20,7 @@ import '../App.css';
 import { dateUpdate, disableZooming, filterPileCapByCP, zoomToLayer } from '../Query';
 import '@esri/calcite-components/dist/components/calcite-card';
 import '@esri/calcite-components/dist/components/calcite-button';
-import { CalciteCard } from '@esri/calcite-components-react';
+import { CalciteCard, CalciteButton } from '@esri/calcite-components-react';
 import ComponentListDisplay, {
   ComponentListDataProvider,
   useComponentListContext,
@@ -72,6 +72,9 @@ function MapPanel() {
   const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
   const [daysPass, setDaysPass] = useState<boolean>(false);
 
+  // Pile cap progress chart
+  const [pileCapChartOpen, setPileCapChartOpen] = useState<boolean>(true);
+
   // Strip map
   const [selectedStrip, setSelectedStrip] = useState<any | undefined | null>(null);
 
@@ -107,8 +110,8 @@ function MapPanel() {
       view.ui.add(legend_workable, 'bottom-right');
 
       view.container = mapDiv.current;
-      view.ui.components = [];
-      view.ui.empty('top-left');
+      // view.ui.components = [];
+      // view.ui.empty('top-left');
 
       // Compass
       compass.container = compassDiv.current;
@@ -124,6 +127,12 @@ function MapPanel() {
       // overview
       overViewExpand.content = document.querySelector(`[id="overviewpanel"]`) as HTMLDivElement;
       view.ui.add(overViewExpand, 'bottom-right');
+
+      // pile cap chart
+      const pileCapChartButton = document.querySelector(
+        `[id="pile-cap-chart-id"]`,
+      ) as HTMLDivElement;
+      view.ui.add(pileCapChartButton, 'top-left');
     }
   }, []);
 
@@ -330,12 +339,21 @@ function MapPanel() {
   return (
     <>
       <div className="mapDiv" ref={mapDiv}></div>
+
+      <CalciteButton
+        icon-end="graph-pie-slice"
+        onClick={(event: any) => setPileCapChartOpen(pileCapChartOpen === false ? true : false)}
+        id="pile-cap-chart-id"
+      ></CalciteButton>
+
       {/* Workable Pile Cap Chart */}
-      <ContractPackageDataProvider>
-        <ComponentListDataProvider>
-          <WorkablePileCapChart />
-        </ComponentListDataProvider>
-      </ContractPackageDataProvider>
+      <div style={{ display: pileCapChartOpen === true ? 'block' : 'none' }}>
+        <ContractPackageDataProvider>
+          <ComponentListDataProvider>
+            <WorkablePileCapChart />
+          </ComponentListDataProvider>
+        </ContractPackageDataProvider>
+      </div>
 
       {/* Control Panel*/}
       <div

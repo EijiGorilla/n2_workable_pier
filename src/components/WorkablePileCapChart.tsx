@@ -50,7 +50,6 @@ const WorkablePileCapChart = () => {
   useEffect(() => {
     calculateWorkablePiers(cpValueSelected, componentSelected).then((result: any) => {
       setWorkableData(result);
-      console.log(result);
     });
   }, [cpValueSelected, componentSelected]);
 
@@ -69,8 +68,9 @@ const WorkablePileCapChart = () => {
     var chart = root.container.children.push(
       am5percent.PieChart.new(root, {
         // centerY: am5.percent(-10), //-10
-        // y: am5.percent(20), // space between pie chart and total lots
-        layout: root.horizontalLayout,
+        // y: am5.percent(10), // space between pie chart and div background
+        // x: am5.percent(-3),
+        layout: root.verticalLayout,
       }),
     );
     chartRef.current = chart;
@@ -83,7 +83,10 @@ const WorkablePileCapChart = () => {
         valueField: 'value',
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(28),
-        scale: 1.8,
+        // marginTop: -50,
+        // marginLeft: -50,
+        // marginRight: -50,
+        scale: 2,
         legendLabelText: '{category}[/] ([#000000; bold]{value.formatNumber("#.")}[/]) ',
         legendValueText: '', //"{valuePercentTotal.formatNumber('#.')}% ({value})"
       }),
@@ -149,11 +152,14 @@ const WorkablePileCapChart = () => {
 
     var legend = chart.children.push(
       am5.Legend.new(root, {
-        centerX: am5.percent(50),
-        x: am5.percent(68),
-        y: am5.percent(35),
+        // centerX: am5.percent(50),
+        x: am5.percent(20),
+        // y: am5.percent(35),
         // paddingTop: -200,
+        // y: am5.percent(50),
+        // centerY: am5.percent(50),
         scale: 0.9,
+        // layout: root.verticalLayout,
       }),
     );
     legendRef.current = legend;
@@ -176,15 +182,15 @@ const WorkablePileCapChart = () => {
     // Responsive legend
     // https://www.amcharts.com/docs/v5/tutorials/pie-chart-with-a-legend-with-dynamically-sized-labels/
     // This aligns Legend to Left
-    chart.onPrivate('width', function (width: any) {
-      const boxWidth = 180; //props.style.width;
-      var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
-      // var availableSpace = (boxWidth - valueLabelsWidth) * 0.7;
-      legend.labels.template.setAll({
-        width: availableSpace,
-        maxWidth: availableSpace,
-      });
-    });
+    // chart.onPrivate('width', function (width: any) {
+    //   const boxWidth = 10; //props.style.width;
+    //   var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
+    //   // var availableSpace = (boxWidth - valueLabelsWidth) * 0.7;
+    //   // legend.labels.template.setAll({
+    //   //   width: availableSpace,
+    //   //   maxWidth: availableSpace,
+    //   // });
+    // });
 
     // To align legend items: valueLabels right, labels to left
     // 1. fix width of valueLabels
@@ -193,10 +199,11 @@ const WorkablePileCapChart = () => {
     // Change legend labelling properties
     // To have responsive font size, do not set font size
     legend.labels.template.setAll({
-      oversizedBehavior: 'truncate',
+      // oversizedBehavior: 'wrap-no-break',
       fill: am5.color('#000000'),
+      // maxWidth: 10,
       //textDecoration: "underline"
-      //width: am5.percent(200)
+      // width: am5.percent(200),
       //fontWeight: "300"
     });
 
@@ -230,14 +237,13 @@ const WorkablePileCapChart = () => {
       <div
         id={chartID}
         style={{
-          height: '500px',
-          width: '500px',
+          height: '250px',
+          width: '210px',
           position: 'fixed',
           zIndex: '10',
-          top: -50,
-          left: -10,
-
-          // backgroundColor: 'gray',
+          top: 150,
+          left: 10,
+          backgroundColor: '#E1E1E1',
         }}
       ></div>
     </>
