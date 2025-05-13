@@ -412,6 +412,60 @@ export const pier_number_label_completed_utility = new LabelClass({
   where: 'AllWorkable = 2',
 });
 
+export const pier_number_label_workable_others = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_workable,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'above-right',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'OthersWorkable = 1',
+});
+
+export const pier_number_label_nonworkable_others = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_nonworkable,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'above-right',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'OthersWorkable = 0',
+});
+
+export const pier_number_label_completed_others = new LabelClass({
+  symbol: new TextSymbol({
+    color: color_completed,
+    haloColor: pier_number_halo_color,
+    haloSize: 0.3,
+    yoffset: yoffset_pierNumber,
+    font: {
+      size: 10,
+      weight: 'bold',
+    },
+  }),
+  labelPlacement: 'always-horizontal',
+  labelExpressionInfo: {
+    expression: '$feature.PierNumber',
+  },
+  where: 'AllWorkable = 2',
+});
+
 // Workable piers for labels
 export const pierNumberLayer_label_all = [
   pier_number_label_nonworkable_all,
@@ -441,6 +495,12 @@ export const pierNumberLayer_label_utility = [
   pier_number_label_nonworkable_utility,
   pier_number_label_workable_utility,
   pier_number_label_completed_utility,
+];
+
+export const pierNumberLayer_label_others = [
+  pier_number_label_nonworkable_others,
+  pier_number_label_workable_others,
+  pier_number_label_completed_others,
 ];
 
 export const pier_number_point_renderer = new SimpleRenderer({
@@ -480,6 +540,12 @@ export const pile_cap_renderer_nlo = new UniqueValueRenderer({
 
 export const pile_cap_renderer_utility = new UniqueValueRenderer({
   field: workable_fields[4],
+  // defaultSymbol: defaultSymbolPierCap,
+  uniqueValueInfos: workable_piers_uniqueValueInfos,
+});
+
+export const pile_cap_renderer_others = new UniqueValueRenderer({
+  field: workable_fields[5],
   // defaultSymbol: defaultSymbolPierCap,
   uniqueValueInfos: workable_piers_uniqueValueInfos,
 });
@@ -720,16 +786,46 @@ export const structureLayer = new FeatureLayer({
 //   ],
 // });
 
-const nlo_renderer = new SimpleRenderer({
-  label: 'Obstruction',
-  symbol: new SimpleMarkerSymbol({
-    color: 'red',
-    size: '8px',
-    outline: {
-      width: 0.3,
-      color: 'black',
+// const nlo_renderer = new SimpleRenderer({
+//   label: 'Obstruction',
+//   symbol: new SimpleMarkerSymbol({
+//     color: 'red',
+//     size: '8px',
+//     outline: {
+//       width: 0.3,
+//       color: 'black',
+//     },
+//   }),
+// });
+
+const nlo_renderer = new UniqueValueRenderer({
+  field: 'Obstruction',
+  uniqueValueInfos: [
+    {
+      value: 'Yes',
+      label: 'Obstruction',
+      symbol: new SimpleMarkerSymbol({
+        color: 'red',
+        size: '8px',
+        outline: {
+          width: 0.3,
+          color: 'black',
+        },
+      }),
     },
-  }),
+    // {
+    //   value: 'No',
+    //   label: 'Workable',
+    //   symbol: new SimpleFillSymbol({
+    //     color: color_workable_obstruction,
+    //     // style: 'backward-diagonal',
+    //     outline: {
+    //       width: 1,
+    //       color: 'black',
+    //     },
+    //   }),
+    // },
+  ],
 });
 
 export const nloLayer = new FeatureLayer({
@@ -923,6 +1019,7 @@ export const lotLayer_overview = new FeatureLayer({
   title: 'Land Acquisition',
   minScale: 20000,
   maxScale: 0,
+  popupEnabled: false,
   //labelsVisible: false,
   elevationInfo: {
     mode: 'on-the-ground',

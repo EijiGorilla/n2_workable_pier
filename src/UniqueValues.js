@@ -23,6 +23,7 @@ export const workable_fields = [
   'StrucWorkable',
   'NLOWorkable',
   'UtilWorkable',
+  'OthersWorkable',
 ];
 export const color_workable = '#38A800';
 export const color_nonworkable = '#FF0000';
@@ -146,7 +147,7 @@ export const pier_number_halo_color = '#9C9C9C'; // '#4E4E4E';
 
 /* eslint-disable prettier/prettier */
 // Updated Dates
-export const updatedDateCategoryNames = 'Viaduct';
+export const updatedDateCategoryNames = 'Land Acquisition';
 export const cutoff_days = 30;
 
 // Date Picker

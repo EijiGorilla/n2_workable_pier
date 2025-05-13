@@ -54,6 +54,8 @@ import {
   nloLayer_overview,
   utilityPointLayer_overview,
   pileCapLayer_overview,
+  pile_cap_renderer_others,
+  pierNumberLayer_label_others,
 } from '../layers';
 import Extent from '@arcgis/core/geometry/Extent';
 import WorkablePileCapChart from './WorkablePileCapChart';
@@ -74,6 +76,9 @@ function MapPanel() {
 
   // Pile cap progress chart
   const [pileCapChartOpen, setPileCapChartOpen] = useState<boolean>(true);
+
+  // Informatino on land and structures to be corrected
+  const [errorLandStrucInfo, setErrorLandStrucInfo] = useState<boolean>(false);
 
   // Strip map
   const [selectedStrip, setSelectedStrip] = useState<any | undefined | null>(null);
@@ -133,6 +138,12 @@ function MapPanel() {
         `[id="pile-cap-chart-id"]`,
       ) as HTMLDivElement;
       view.ui.add(pileCapChartButton, 'top-left');
+
+      // Error - land and structure
+      // const errorLandStrucInfoButton = document.querySelector(
+      //   `[id="error-land-struc-info-id]`,
+      // ) as HTMLDivElement;
+      // view.ui.add(errorLandStrucInfoButton, 'top-left');
     }
   }, []);
 
@@ -267,6 +278,21 @@ function MapPanel() {
         structureLayer_overview.visible = false;
         nloLayer_overview.visible = false;
         utilityPointLayer_overview.visible = true;
+      } else if (componentSelected === 'Others') {
+        pileCapLayer.renderer = pile_cap_renderer_others;
+        pileCapLayer.labelingInfo = pierNumberLayer_label_others;
+        lotLayer.visible = false;
+        structureLayer.visible = false;
+        nloLayer.visible = false;
+        utilityPointLayer.visible = false;
+
+        // Overview
+        pileCapLayer_overview.renderer = pile_cap_renderer_others;
+        pileCapLayer_overview.labelingInfo = pierNumberLayer_label_others;
+        lotLayer_overview.visible = false;
+        structureLayer_overview.visible = false;
+        nloLayer_overview.visible = false;
+        utilityPointLayer_overview.visible = false;
       }
     }
   }, [cpValueSelected, componentSelected]);
@@ -339,14 +365,12 @@ function MapPanel() {
   return (
     <>
       <div className="mapDiv" ref={mapDiv}></div>
-
+      {/* Workable Pile Cap Chart */}
       <CalciteButton
         icon-end="graph-pie-slice"
         onClick={(event: any) => setPileCapChartOpen(pileCapChartOpen === false ? true : false)}
         id="pile-cap-chart-id"
       ></CalciteButton>
-
-      {/* Workable Pile Cap Chart */}
       <div style={{ display: pileCapChartOpen === true ? 'block' : 'none' }}>
         <ContractPackageDataProvider>
           <ComponentListDataProvider>
@@ -354,7 +378,32 @@ function MapPanel() {
           </ComponentListDataProvider>
         </ContractPackageDataProvider>
       </div>
+      {/* Error Land & Struc info */}
 
+      {/* <div style={{ position: 'fixed', zIndex: 10, bottom: 5, left: 5 }}>
+        <CalciteButton
+          icon-end="exclamation-point-f"
+          onClick={(event: any) =>
+            setErrorLandStrucInfo(errorLandStrucInfo === false ? true : false)
+          }
+          id="error-land-struc-info-id"
+        ></CalciteButton>
+      </div> */}
+
+      <div
+        style={{
+          display: errorLandStrucInfo === true ? 'block' : 'none',
+          position: 'fixed',
+          zIndex: 10,
+          bottom: '50%',
+          left: '50%',
+          backgroundColor: 'lightgrey',
+          width: '200px',
+          height: '200px',
+        }}
+      >
+        Check lands and structures below:
+      </div>
       {/* Control Panel*/}
       <div
         id="controlpanel"
@@ -365,11 +414,9 @@ function MapPanel() {
           <ComponentListDisplay />
         </CalciteCard>
       </div>
-
       <div id="overviewpanel">
         <div className="overviewMapdDiv" ref={overviewMapDiv}></div>
       </div>
-
       {/* Updated date */}
       <div
         style={{
