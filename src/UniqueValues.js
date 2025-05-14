@@ -143,8 +143,8 @@ export const pointOutlineWidth = 2.5; // original: 1.5
 export const labelStation_fontSize = 11;
 export const labelStation_fontSize_default = 11.5;
 
-export const pier_number_halo_color = '#9C9C9C'; // '#4E4E4E';
-
+export const pier_number_halo_color = '#ffffff'; // '#9C9C9C'; // '#4E4E4E';
+export const pier_number_halo_size = 0.5;
 /* eslint-disable prettier/prettier */
 // Updated Dates
 export const updatedDateCategoryNames = 'Land Acquisition';

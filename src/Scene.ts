@@ -181,7 +181,7 @@ export const legend_workable_overview = new Legend({
     },
     {
       layer: utilityPointLayer_overview,
-      title: 'Utility (Incompleted)',
+      title: 'Utility Work (Incomplete)',
     },
   ],
 });
@@ -208,7 +208,7 @@ export const legend_workable = new Legend({
     },
     {
       layer: utilityPointLayer,
-      title: 'Utility (Incompleted)',
+      title: 'Utility Work (Incomplete)',
     },
   ],
 });
