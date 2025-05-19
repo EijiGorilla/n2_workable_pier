@@ -6,6 +6,7 @@ import {
   nloLayer,
   nloLayer_overview,
   pileCapLayer,
+  pileCapLayer_overview,
   stripMapLayer,
   structureLayer,
   structureLayer_overview,
@@ -156,6 +157,7 @@ export async function calculateWorkablePiers(contractp: any, component: any) {
 export function filterPileCapByCP(cp: any) {
   const query_cp = "CP = '" + cp + "'";
   pileCapLayer.definitionExpression = query_cp;
+  pileCapLayer_overview.definitionExpression = query_cp;
 
   lotLayer.definitionExpression = query_cp;
   structureLayer.definitionExpression = query_cp;

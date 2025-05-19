@@ -1,26 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { lotLayer } from '../layers';
-import { view } from '../Scene';
-import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
-import Query from '@arcgis/core/rest/support/Query';
 import * as am5 from '@amcharts/amcharts5';
-import am5index from '@amcharts/amcharts5/index';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { calculateWorkablePiers, thousands_separators } from '../Query';
+import { calculateWorkablePiers } from '../Query';
 import '../App.css';
-import '@esri/calcite-components/dist/components/calcite-segmented-control';
-import '@esri/calcite-components/dist/components/calcite-segmented-control-item';
-import '@esri/calcite-components/dist/components/calcite-label';
-import '@esri/calcite-components/dist/components/calcite-checkbox';
-import {
-  CalciteSegmentedControl,
-  CalciteSegmentedControlItem,
-  CalciteCheckbox,
-} from '@esri/calcite-components-react';
-import { cutoff_days, updatedDateCategoryNames } from '../UniqueValues';
-
 import { useContractPackageContext } from './ContractPackageContext';
 import { useComponentListContext } from './ComponentContext';
 
