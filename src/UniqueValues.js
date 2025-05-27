@@ -33,7 +33,7 @@ export const color_nonworkable_obstruction = [255, 0, 0, 0.4];
 export const color_nonworkable_obstruction_struc = [104, 104, 104, 0.4];
 export const workable_piers_uniqueValueInfos = [
   {
-    value: 0,
+    value: 1,
     label: 'Non-Workable',
     symbol: new SimpleFillSymbol({
       color: color_nonworkable,
@@ -44,7 +44,7 @@ export const workable_piers_uniqueValueInfos = [
     }),
   },
   {
-    value: 1,
+    value: 0,
     label: 'Workable',
     symbol: new SimpleFillSymbol({
       color: color_workable,
